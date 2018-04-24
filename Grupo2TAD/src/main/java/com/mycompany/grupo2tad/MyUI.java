@@ -7,7 +7,10 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Calendar;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -24,22 +27,34 @@ public class MyUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        final VerticalLayout layout = new VerticalLayout();
+        final HorizontalLayout main = new HorizontalLayout();
+        MainMenu menu = new MainMenu();
+        TopMenu top = new TopMenu();
+        main.addComponent(menu.getMenu());
         
-        final TextField name = new TextField();
-        name.setCaption("Type your name here:");
-
-        Button button = new Button("Click Me");
-        button.addClickListener( e -> {
-            layout.addComponent(new Label("Thanks " + name.getValue() 
-                    + ", it works!"));
-        });
+        Calendar cal = new Calendar();
+cal.setSizeFull();
+cal.setWidth(100, Unit.PERCENTAGE);
         
-        layout.addComponents(name, button);
-        layout.setMargin(true);
-        layout.setSpacing(true);
+        main.addComponent(new VerticalLayout(top.getTopBar(),cal));
         
-        setContent(layout);
+        
+//        final VerticalLayout layout = new VerticalLayout();
+//        MainMenu menu = new MainMenu();
+//        final TextField name = new TextField();
+//        name.setCaption("Type your name here:");
+//
+//        Button button = new Button("Click Me");
+//        button.addClickListener( e -> {
+//            layout.addComponent(new Label("Thanks " + name.getValue() 
+//                    + ", it works!"));
+//        });
+//        
+//        layout.addComponents(menu.getBarmenu(),name, button);
+//        layout.setMargin(true);
+//        layout.setSpacing(true);
+//        
+        setContent(main);
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
