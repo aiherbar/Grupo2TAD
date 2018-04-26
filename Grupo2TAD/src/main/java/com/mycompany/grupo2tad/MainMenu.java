@@ -23,7 +23,7 @@ public class MainMenu {
         menu = new CssLayout();
 
         menu.addStyleName(ValoTheme.MENU_PART_LARGE_ICONS);
-        Label l = new Label("Interviews Dashaboard");
+        Label l = new Label("Interviews Dashboard");
         l.setStyleName(ValoTheme.LABEL_H3);
         menu.addComponent(l);
         
