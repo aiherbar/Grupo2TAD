@@ -26,10 +26,8 @@ public class MainMenu {
         Label l = new Label("Interviews Dashaboard");
         l.setStyleName(ValoTheme.LABEL_H3);
         menu.addComponent(l);
-        
-        
-        
-         Button main = new Button("Principal");
+
+        Button main = new Button("Principal");
         main.setIcon(FontAwesome.CALENDAR_O);
         main.setPrimaryStyleName(ValoTheme.MENU_ITEM);
         menu.addComponent(main);
@@ -49,6 +47,5 @@ public class MainMenu {
     public CssLayout getMenu() {
         return menu;
     }
-
 
 }
