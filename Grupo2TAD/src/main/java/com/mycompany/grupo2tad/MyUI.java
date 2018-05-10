@@ -66,8 +66,8 @@ public class MyUI extends UI {
         c.add(java.util.Calendar.DAY_OF_MONTH, 30);
         cal.setEndDate(c.getTime());
         cal.setWidth(100, Unit.PERCENTAGE);
-
-        main.addComponents(new VerticalLayout(top.getTopBar(), cal));
+        
+        main.addComponents(new VerticalLayout(top.getTopBar(), cal),top.getLeftBar());
 
 //        final VerticalLayout layout = new VerticalLayout();
 //        MainMenu menu = new MainMenu();
