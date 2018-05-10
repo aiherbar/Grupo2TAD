@@ -8,6 +8,7 @@ package com.mycompany.grupo2tad;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -35,9 +36,11 @@ public class MainMenu {
         menu.addComponent(main);
 
         Button charts = new Button("Estadisticas");
+        DragAndDropWrapper draggable = new DragAndDropWrapper(charts);
+        draggable.setDragStartMode(DragAndDropWrapper.DragStartMode.WRAPPER);
         charts.setIcon(FontAwesome.BAR_CHART_O);
         charts.setPrimaryStyleName(ValoTheme.MENU_ITEM);
-        menu.addComponent(charts);
+        menu.addComponent(draggable);
 
         Button logOut = new Button("Log Out");
         logOut.setIcon(FontAwesome.ARROW_LEFT);

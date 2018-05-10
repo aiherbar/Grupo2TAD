@@ -58,9 +58,13 @@ public class MyUI extends UI {
         form.addComponents(tituloLogin, usuario, password, login);
         loginLayout.addComponent(form);
         setContent(loginLayout);
-
+        
         main.addComponent(menu.getMenu());
         Calendar cal = new Calendar();
+        java.util.Calendar c = java.util.Calendar.getInstance();
+        cal.setStartDate(c.getTime());
+        c.add(java.util.Calendar.DAY_OF_MONTH, 30);
+        cal.setEndDate(c.getTime());
         cal.setWidth(100, Unit.PERCENTAGE);
 
         main.addComponents(new VerticalLayout(top.getTopBar(), cal));
@@ -86,5 +90,5 @@ public class MyUI extends UI {
     @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {
     }
-
+    
 }
