@@ -9,6 +9,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -24,7 +25,8 @@ public class TopAndRightMenu {
     private final Button createIntervied;
 
     final VerticalLayout leftBar;
-    final FormLayout formPersonas;
+    final FormLayout formEntrevistados;
+    final FormLayout formEntrevistadores;
     final FormLayout formEntrevista;
     
     
@@ -32,6 +34,10 @@ public class TopAndRightMenu {
     final TextField name;
     final TextField apellidos;
     final TextField DNI;
+    final TextField nameEntrevistador;
+    final TextField apellidosEntrevistador;
+    final TextField DNIEntrevistador;
+    final TextField Departamento;
     final Button submitInteviewer;
     final Button submitIntervied;
     
@@ -49,7 +55,8 @@ public class TopAndRightMenu {
         createInterviwer = new Button("Crear entrevistador");
         createIntervied = new Button("Crear entrevistado");
         leftBar = new VerticalLayout();
-        formPersonas = new FormLayout();
+        formEntrevistados = new FormLayout();
+        formEntrevistadores = new FormLayout();
         formEntrevista = new FormLayout();
 
         
@@ -57,6 +64,10 @@ public class TopAndRightMenu {
         name = new TextField("Nombre");
         apellidos = new TextField("Apellidos");
         DNI = new TextField("DNI");
+        nameEntrevistador = new TextField("Nombre");
+        apellidosEntrevistador = new TextField("Apellidos");
+        DNIEntrevistador = new TextField("DNI");
+        Departamento = new TextField("Departamento");
         submitInteviewer = new Button("Aceptar");
         submitIntervied = new Button("Aceptar");
         
@@ -66,11 +77,13 @@ public class TopAndRightMenu {
         entrevistados = new ComboBox("Entrevistado");
         submitInterview = new Button("Aceptar");
         
-        formPersonas.addComponents(name,apellidos,DNI,submitInteviewer,submitIntervied);
+
+        formEntrevistados.addComponents(name,apellidos,DNI,submitIntervied);
+        formEntrevistadores.addComponents(nameEntrevistador,apellidosEntrevistador,DNIEntrevistador,Departamento,submitInteviewer);
         formEntrevista.addComponents(entrevistadores,entrevistados,submitInterview);
         
         topBar.addComponents(createInterView, createInterviwer, createIntervied);
-        leftBar.addComponent(formPersonas);
+
         leftBar.setVisible(false);
 
         this.createEvents();
@@ -91,9 +104,7 @@ public class TopAndRightMenu {
             
                 leftBar.setVisible(true);
                 leftBar.removeAllComponents();
-                leftBar.addComponent(formPersonas);
-                submitIntervied.setVisible(false);
-                submitInteviewer.setVisible(true);
+                leftBar.addComponent(formEntrevistadores);
             
 
         });
@@ -102,9 +113,8 @@ public class TopAndRightMenu {
 
                 leftBar.setVisible(true);
                 leftBar.removeAllComponents();
-                leftBar.addComponent(formPersonas);
-                submitIntervied.setVisible(true);
-                submitInteviewer.setVisible(false);
+                leftBar.addComponent(formEntrevistados);
+
             
 
         });

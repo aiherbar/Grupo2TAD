@@ -32,12 +32,13 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("mytheme")
 public class MyUI extends UI {
 
-    final HorizontalLayout main = new HorizontalLayout();
-    final MainMenu menu = new MainMenu();
-    final TopAndRightMenu top = new TopAndRightMenu();
 
+    final MainMenu menu = new MainMenu();
+    final HorizontalLayout main = new HorizontalLayout(); 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+            main.addComponents(menu.getMenu(),menu.getCurrent());
+        
         WrappedSession session = getSession().getSession();
      
         CssLayout loginLayout = new CssLayout();
@@ -59,15 +60,10 @@ public class MyUI extends UI {
         loginLayout.addComponent(form);
         setContent(loginLayout);
         
-        main.addComponent(menu.getMenu());
-        Calendar cal = new Calendar();
-        java.util.Calendar c = java.util.Calendar.getInstance();
-        cal.setStartDate(c.getTime());
-        c.add(java.util.Calendar.DAY_OF_MONTH, 30);
-        cal.setEndDate(c.getTime());
-        cal.setWidth(100, Unit.PERCENTAGE);
+    
+
         
-        main.addComponents(new VerticalLayout(top.getTopBar(), cal),top.getRightBar());
+      
 
 //        final VerticalLayout layout = new VerticalLayout();
 //        MainMenu menu = new MainMenu();
