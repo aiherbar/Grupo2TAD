@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 11-may-2018 11:08:30 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="proyecto_tad.entity.Entrevista" table="entrevista" catalog="proyecto_tad" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="idEntrevistado" type="int">
+            <column name="id_entrevistado" not-null="true" />
+        </property>
+        <property name="idEntrevistador" type="int">
+            <column name="id_entrevistador" not-null="true" />
+        </property>
+        <property name="apto" type="byte">
+            <column name="apto" not-null="true">
+                <comment>0: No apto; 1: Apto</comment>
+            </column>
+        </property>
+        <property name="fecha" type="date">
+            <column name="fecha" length="10" not-null="true" />
+        </property>
+        <property name="lugar" type="string">
+            <column name="lugar" length="40" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

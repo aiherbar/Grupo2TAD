@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 11-may-2018 11:08:30 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="proyecto_tad.entity.Entrevistador" table="entrevistador" catalog="proyecto_tad" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="dni" type="string">
+            <column name="dni" length="10" not-null="true" />
+        </property>
+        <property name="nombre" type="string">
+            <column name="nombre" length="40" not-null="true" />
+        </property>
+        <property name="departamento" type="string">
+            <column name="departamento" length="40" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

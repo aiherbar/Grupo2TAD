@@ -18,6 +18,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import org.hibernate.Session;
+import proyecto_tad.util.HibernateUtil;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser
@@ -34,12 +36,12 @@ public class MyUI extends UI {
 
     final HorizontalLayout main = new HorizontalLayout();
     final MainMenu menu = new MainMenu();
-    final TopAndLeftMenu top = new TopAndLeftMenu();
+    final TopAndRightMenu top = new TopAndRightMenu();
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         WrappedSession session = getSession().getSession();
-        
+     
         CssLayout loginLayout = new CssLayout();
         FormLayout form = new FormLayout();
 
@@ -67,7 +69,7 @@ public class MyUI extends UI {
         cal.setEndDate(c.getTime());
         cal.setWidth(100, Unit.PERCENTAGE);
         
-        main.addComponents(new VerticalLayout(top.getTopBar(), cal),top.getLeftBar());
+        main.addComponents(new VerticalLayout(top.getTopBar(), cal),top.getRightBar());
 
 //        final VerticalLayout layout = new VerticalLayout();
 //        MainMenu menu = new MainMenu();

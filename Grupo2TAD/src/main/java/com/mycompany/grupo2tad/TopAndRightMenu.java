@@ -9,7 +9,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -17,7 +16,7 @@ import com.vaadin.ui.VerticalLayout;
  *
  * @author Anais
  */
-public class TopAndLeftMenu {
+public class TopAndRightMenu {
 
     private final HorizontalLayout topBar;
     private final Button createInterView;
@@ -41,7 +40,9 @@ public class TopAndLeftMenu {
     final ComboBox entrevistados;
     final Button submitInterview;
 
-    public TopAndLeftMenu() {
+    private DBController controller;
+    public TopAndRightMenu() {
+        controller = new DBController();
         topBar = new HorizontalLayout();
         createInterView = new Button("Crear entrevistas");
         createInterviwer = new Button("Crear entrevistador");
@@ -78,7 +79,7 @@ public class TopAndLeftMenu {
         return topBar;
     }
 
-    public VerticalLayout getLeftBar() {
+    public VerticalLayout getRightBar() {
         return leftBar;
     }
 
