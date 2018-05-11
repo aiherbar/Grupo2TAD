@@ -41,6 +41,7 @@ public class TopAndRightMenu {
     final Button submitInterview;
 
     private DBController controller;
+    
     public TopAndRightMenu() {
         controller = new DBController();
         topBar = new HorizontalLayout();
