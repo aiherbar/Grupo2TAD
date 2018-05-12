@@ -92,7 +92,7 @@ public class DBController {
      public static void eliminarEntrevistador(String no, String a) {
         Session session=HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("delete Entrevistado where nombre= :name and dni= :dni");
+        Query q=session.createQuery("delete Entrevistador where nombre= :name and dni= :dni");
         q.setParameter("name", no);
         q.setParameter("dni", a);
         q.executeUpdate();
@@ -117,7 +117,7 @@ public class DBController {
         List<Entrevistado>lista=new ArrayList();
         Session session=HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("From Entrevistados");
+        Query q=session.createQuery("From Entrevistado");
         lista=q.list();
         tx.commit();
         return lista;
