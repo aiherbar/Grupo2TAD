@@ -12984,23 +12984,3 @@ div.v-layout.v-horizontal.v-widget {
 	width: 19px;
 	overflow: hidden;
 }
-
-.mytheme .mytheme .card {
-	width: 100px;
-	height: 100px;
-	border: 1px solid white;
-	border-radius: 7px;
-	padding-left: 10px;
-	color: black;
-	font-weight: bolder;
-	font-size: 10px;
-	background-color: rgba(128, 191, 255, 0.3);
-}
-
-.mytheme .mytheme .v-label-drag-center {
-	border-style: dashed;
-}
-
-.mytheme .mytheme .dragged {
-	opacity: 0.4;
-}
