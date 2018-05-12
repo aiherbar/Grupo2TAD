@@ -47,25 +47,25 @@ public class DBController {
         tx.commit();
     }
     
-     public static void eliminarEntrevista(Date fecha, String lugar) {
+     public static void eliminarEntrevista(int id) {
         Session session=HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("delete Entrevista where fecha= :date and lugar= :place");
-        q.setParameter("date", fecha);
-        q.setParameter("place", lugar);
+        Query q=session.createQuery("delete Entrevista where id= :ident");
+        q.setParameter("ident", id);
         q.executeUpdate();
         tx.commit();
     }
 
-    public static void actualizarEntrevista(int id_entrevistado, int id_entrevistador, byte apto,Date fecha,String lugar) {
+    public static void actualizarEntrevista(int id,int id_entrevistado, int id_entrevistador, byte apto,Date fecha,String lugar) {
         Session session=HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("update Entrevista set id_entrevistado=:idendo,id_entrevistador=:identa,apto=apt,fecha=date,lugar=place where fecha= :date and lugar= :place ");
+        Query q=session.createQuery("update Entrevista set id_entrevistado=:idendo,id_entrevistador=:identa,apto=apt,fecha=date,lugar=place where id= :ident ");
         q.setParameter("idendo", id_entrevistado);
         q.setParameter("identa", id_entrevistador);
         q.setParameter("apt", apto);
         q.setParameter("date", fecha);
         q.setParameter("place", lugar);
+        q.setParameter("ident", id);
         q.executeUpdate();
         tx.commit();
     }
@@ -89,24 +89,24 @@ public class DBController {
         tx.commit();
     }
     
-     public static void eliminarEntrevistador(String no, String a) {
+     public static void eliminarEntrevistador(int id) {
         Session session=HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("delete Entrevistador where nombre= :name and dni= :dni");
-        q.setParameter("name", no);
-        q.setParameter("dni", a);
+        Query q=session.createQuery("delete Entrevistador where id= :ident");
+        q.setParameter("ident", id);
         q.executeUpdate();
         tx.commit();
     }
 
-    public static void actualizarEntrevistador(String nombreAntiguo,String dni2, String nombre2,String departamento2) {
+    public static void actualizarEntrevistador(int id,String nombreAntiguo,String dni2, String nombre2,String departamento2) {
         Session session=HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("update Entrevistador set dni=:dn,nombre=:name,departamento=dpto where nombre=:name2 ");
+        Query q=session.createQuery("update Entrevistador set dni=:dn,nombre=:name,departamento=dpto where id=:ident ");
         q.setParameter("name", nombre2);
         q.setParameter("dpto", departamento2);
         q.setParameter("name2", nombreAntiguo);
         q.setParameter("dn", dni2);
+        q.setParameter("ident", id);
         q.executeUpdate();
         tx.commit();
     }
@@ -131,23 +131,23 @@ public class DBController {
         tx.commit();
     }
     
-     public static void eliminarEntrevistado(String no, String a) {
+     public static void eliminarEntrevistado(int id) {
         Session session=HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("delete Entrevistado where nombre= :name and dni= :dni");
-        q.setParameter("name", no);
-        q.setParameter("dni", a);
+        Query q=session.createQuery("delete Entrevistado where id= :ident");
+        q.setParameter("ident", id);
         q.executeUpdate();
         tx.commit();
     }
 
-    public static void actualizarEntrevistado(String nombreAntiguo,String dni2, String nombre2) {
+    public static void actualizarEntrevistado(int id,String nombreAntiguo,String dni2, String nombre2) {
         Session session=HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("update Entrevistado set dni=:dn,nombre=:name where nombre=:name2 ");
+        Query q=session.createQuery("update Entrevistado set dni=:dn,nombre=:name where id=:ident ");
         q.setParameter("name", nombre2);
-        q.setParameter("name2", nombreAntiguo);
+        q.setParameter("ident", id);
         q.setParameter("dn", dni2);
+        
         q.executeUpdate();
         tx.commit();
     }
