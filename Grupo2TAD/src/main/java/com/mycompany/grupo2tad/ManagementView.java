@@ -5,13 +5,9 @@
  */
 package com.mycompany.grupo2tad;
 
-import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -56,15 +52,14 @@ public class ManagementView {
     final Button removeIntervied;
 
     //Datos de el formulario de la entrevista
-    final ComboBox entrevistadores;
-    final ComboBox entrevistados;
-    final TextField Lugar;
+    final TextField apto;
     final Button updateInterview;
     final Button removeInterview;
 
+    private int id;
+
     public ManagementView() {
         this.main = new HorizontalLayout();
-
         //Setear tablas
         this.tableInterviews = new Table();
         this.tableInterviewers = new Table();
@@ -98,9 +93,7 @@ public class ManagementView {
         removeIntervied = new Button("Borrar");
 
         //Crear objectos del segundo formulario
-        entrevistadores = new ComboBox("Entrevistador");
-        Lugar = new TextField("Lugar");
-        entrevistados = new ComboBox("Entrevistado");
+        apto = new TextField("Apto (SI/NO)");
         updateInterview = new Button("Modificar");
         removeInterview = new Button("Borrar");
 
@@ -108,7 +101,7 @@ public class ManagementView {
         //Crear formularios
         formEntrevistados.addComponents(name, apellidos, DNI, updateIntervied, removeIntervied);
         formEntrevistadores.addComponents(nameEntrevistador, apellidosEntrevistador, DNIEntrevistador, Departamento, updateInteviewer, removeInteviewer);
-        formEntrevista.addComponents(entrevistadores, entrevistados, Lugar, updateInterview, removeInterview);
+        formEntrevista.addComponents(apto, updateInterview, removeInterview);
 
         formEntrevista.setVisible(false);
         formEntrevistadores.setVisible(false);
@@ -127,18 +120,22 @@ public class ManagementView {
 
     private void setTables() {
 
-        tableInterviews.addContainerProperty("Entrevistador", String.class, null);
-        tableInterviews.addContainerProperty("Entrevistado", String.class, null);
+        tableInterviews.addContainerProperty("Entrevistador", Object.class, null);
+        tableInterviews.addContainerProperty("Entrevistado", Object.class, null);
         tableInterviews.addContainerProperty("Lugar", String.class, null);
         tableInterviews.addContainerProperty("Fecha", Date.class, null);
+        tableInterviews.addContainerProperty("Apto", String.class, null);
         tableInterviews.setVisible(false);
 
-        tableInterviews.addValueChangeListener(e -> {
+        tableInterviews.addItemClickListener(e -> {
 
             rightBar.setVisible(true);
             formEntrevista.setVisible(true);
             formEntrevistadores.setVisible(false);
             formEntrevistados.setVisible(false);
+            id = (int) tableInterviews.getValue();
+            apto.setValue((String) e.getItem().getItemProperty("Apto").getValue());
+
         });
 
         tableInterviewers.addContainerProperty("Nombre", String.class, null);
@@ -146,22 +143,33 @@ public class ManagementView {
         tableInterviewers.addContainerProperty("DNI", String.class, null);
         tableInterviewers.addContainerProperty("Departamento", Date.class, null);
 
-        tableInterviewers.addValueChangeListener(e -> {
+        tableInterviewers.addItemClickListener(e -> {
             rightBar.setVisible(true);
             formEntrevista.setVisible(false);
             formEntrevistadores.setVisible(true);
             formEntrevistados.setVisible(false);
+            id = (int) tableInterviewers.getValue();
+
+            nameEntrevistador.setValue((String) e.getItem().getItemProperty("Nombre").getValue());
+            apellidosEntrevistador.setValue((String) e.getItem().getItemProperty("Apellidos").getValue());
+            DNIEntrevistador.setValue((String) e.getItem().getItemProperty("DNI").getValue());
+            Departamento.setValue((String) e.getItem().getItemProperty("Departamento").getValue());
         });
 
         tableIntervieweds.addContainerProperty("Nombre", String.class, null);
         tableIntervieweds.addContainerProperty("Apellidos", String.class, null);
         tableIntervieweds.addContainerProperty("DNI", String.class, null);
         tableIntervieweds.setVisible(false);
-        tableIntervieweds.addValueChangeListener(e -> {
+        tableIntervieweds.addItemClickListener(e -> {
             rightBar.setVisible(true);
             formEntrevista.setVisible(false);
             formEntrevistadores.setVisible(false);
             formEntrevistados.setVisible(true);
+            id = (int) tableIntervieweds.getValue();
+
+            name.setValue((String) e.getItem().getItemProperty("Nombre").getValue());
+            apellidos.setValue((String) e.getItem().getItemProperty("Apellidos").getValue());
+            DNI.setValue((String) e.getItem().getItemProperty("DNI").getValue());
         });
 
         tableIntervieweds.setSizeFull();
@@ -195,11 +203,11 @@ public class ManagementView {
         //obtener lista de base de datos
         //recorrer lista y rellenar tabla
         tableInterviews.addItem(new Object[]{
-            "Entrevistador", 
+            "Entrevistador",
             "Entrevistado",
             "lugar",
             "fecha"
-        
+
         }, 2);
 
     }
@@ -217,6 +225,11 @@ public class ManagementView {
     private void setButtonEvents() {
 
         updateInteviewer.addClickListener(e -> {
+            String name = nameEntrevistador.getValue();
+            String surname = apellidosEntrevistador.getValue();
+            String dni = DNIEntrevistador.getValue();
+            String departamento = Departamento.getValue();
+
         });
         updateInteviewer.addClickListener(e -> {
         });
