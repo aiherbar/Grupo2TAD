@@ -21,6 +21,8 @@ import com.vaadin.ui.components.calendar.CalendarTargetDetails;
 import com.vaadin.ui.components.calendar.event.BasicEvent;
 import com.vaadin.ui.components.calendar.event.BasicEventProvider;
 import java.util.Date;
+import java.util.List;
+import proyecto_tad.entity.Entrevista;
 
 public class MainView {
 
@@ -28,16 +30,23 @@ public class MainView {
     final TopAndRightMenu top;
     final HorizontalLayout main;
     final Table interviews;
+    
+    private DBController controller;
 
     public MainView() {
+        controller = DBController.getInstance();
         this.top = new TopAndRightMenu();
         this.main = new HorizontalLayout();
         this.interviews = new Table("Entrevistas");
 
-        this.interviews.addContainerProperty("Entrevistado", String.class, null);
-        this.interviews.addContainerProperty("Entrevistador", String.class, null);
+        this.interviews.addContainerProperty("Entrevistado", Object.class, null);
+        this.interviews.addContainerProperty("Entrevistador", Object.class, null);
         this.interviews.addContainerProperty("Lugar", String.class, null);
 
+        List<Entrevista> entrevistas = controller.getEntrevistasNoAgendadas();
+        for (Entrevista entrevista : entrevistas) {
+            
+        }
         this.interviews.addItem(new Object[]{"Pepe", "Ramiro", "Madrid"}, 1);
         this.interviews.addItem(new Object[]{"Luis", "Ramiro", "Madrid"}, 2);
         this.interviews.addItem(new Object[]{"Raquel", "Juan", "Jaen"}, 3);

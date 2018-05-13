@@ -48,7 +48,7 @@ public class TopAndRightMenu {
     private DBController controller;
     
     public TopAndRightMenu() {
-        controller = new DBController();
+        controller = DBController.getInstance();
         topBar = new HorizontalLayout();
         createInterView = new Button("Crear entrevistas");
         createInterviwer = new Button("Crear entrevistador");
