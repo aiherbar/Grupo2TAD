@@ -70,6 +70,26 @@ public class DBController {
         tx.commit();
     }
     
+    public static List<Entrevista> consultarEntrevistasAgendadas() {
+        List<Entrevista>lista=new ArrayList();
+        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction tx=session.beginTransaction();
+        Query q=session.createQuery("From Entrevista where fecha=''");
+        lista=q.list();
+        tx.commit();
+        return lista;
+    }
+    
+    public static List<Entrevista> consultarEntrevistasNoAgendadas() {
+        List<Entrevista>lista=new ArrayList();
+        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction tx=session.beginTransaction();
+        Query q=session.createQuery("From Entrevista where fecha!=''");
+        lista=q.list();
+        tx.commit();
+        return lista;
+    }
+    
     //Entrevistadores
     public static List<Entrevistador> consultarEntrevistadores() {
         List<Entrevistador>lista=new ArrayList();
