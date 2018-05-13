@@ -22,44 +22,47 @@ import proyecto_tad.util.HibernateUtil;
  */
 public class DBController {
        Session hibernateSession;
+       private static DBController instance = null;
 
-    public DBController() {
+    private DBController() {
         this.hibernateSession = HibernateUtil.getSessionFactory().getCurrentSession();
-        
+    }
+
+    public static DBController getInstance(){
+        if(instance == null){
+            instance = new DBController();
+        }
+        return instance;
     }
     //Entrevistas
-    
-    public static List<Entrevista> consultarEntrevistas() {
+
+    public List<Entrevista> getEntrevistas() {
         List<Entrevista>lista=new ArrayList();
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("From Entrevista");
+        Transaction tx=this.hibernateSession.beginTransaction();
+        Query q=this.hibernateSession.createQuery("From Entrevista");
         lista=q.list();
         tx.commit();
         return lista;
     }
-    
-    public static void altaEntrevista(int id_entrevistado, int id_entrevistador, byte apto,Date fecha,String lugar) {
+
+    public void setEntrevista(int id_entrevistado, int id_entrevistador, byte apto,Date fecha,String lugar) {
         Entrevista p=new Entrevista(id_entrevistado, id_entrevistador,apto,fecha,lugar);
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        session.save(p);
+        Transaction tx=this.hibernateSession.beginTransaction();
+        this.hibernateSession.save(p);
         tx.commit();
     }
-    
-     public static void eliminarEntrevista(int id) {
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("delete Entrevista where id= :ident");
+
+     public void edeleteEntrevista(int id) {
+        Transaction tx=this.hibernateSession.beginTransaction();
+        Query q=this.hibernateSession.createQuery("delete Entrevista where id= :ident");
         q.setParameter("ident", id);
         q.executeUpdate();
         tx.commit();
     }
 
-    public static void actualizarEntrevista(int id,int id_entrevistado, int id_entrevistador, byte apto,Date fecha,String lugar) {
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("update Entrevista set id_entrevistado=:idendo,id_entrevistador=:identa,apto=apt,fecha=date,lugar=place where id= :ident ");
+    public void updateEntrevista(int id,int id_entrevistado, int id_entrevistador, byte apto,Date fecha,String lugar) {
+        Transaction tx=this.hibernateSession.beginTransaction();
+        Query q=this.hibernateSession.createQuery("update Entrevista set id_entrevistado=:idendo,id_entrevistador=:identa,apto=apt,fecha=date,lugar=place where id= :ident ");
         q.setParameter("idendo", id_entrevistado);
         q.setParameter("identa", id_entrevistador);
         q.setParameter("apt", apto);
@@ -69,59 +72,61 @@ public class DBController {
         q.executeUpdate();
         tx.commit();
     }
-    
-    public static List<Entrevista> consultarEntrevistasAgendadas() {
+
+    public List<Entrevista> getEntrevistasAgendadas() {
         List<Entrevista>lista=new ArrayList();
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("From Entrevista where fecha=''");
+        Transaction tx=this.hibernateSession.beginTransaction();
+        Query q=this.hibernateSession.createQuery("From Entrevista where fecha=''");
         lista=q.list();
         tx.commit();
         return lista;
     }
-    
-    public static List<Entrevista> consultarEntrevistasNoAgendadas() {
+
+    public List<Entrevista> getEntrevistasNoAgendadas() {
         List<Entrevista>lista=new ArrayList();
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("From Entrevista where fecha!=''");
+        Transaction tx=this.hibernateSession.beginTransaction();
+        Query q=this.hibernateSession.createQuery("From Entrevista where fecha!=''");
         lista=q.list();
         tx.commit();
         return lista;
     }
-    
+
+    public Entrevista getEntrevista(int id){
+        Transaction tx = this.hibernateSession.beginTransaction();
+        Query q = this.hibernateSession.createQuery("From Entrevista where id='"+id+"'");
+        Entrevista entrevista = (Entrevista) q.list().get(0);
+        tx.commit();
+        return entrevista;
+    }
+
     //Entrevistadores
-    public static List<Entrevistador> consultarEntrevistadores() {
+    public List<Entrevistador> getEntrevistadores() {
         List<Entrevistador>lista=new ArrayList();
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("From Entrevistador");
+        Transaction tx=this.hibernateSession.beginTransaction();
+        Query q=this.hibernateSession.createQuery("From Entrevistador");
         lista=q.list();
         tx.commit();
         return lista;
     }
-    
-    public static void altaEntrevistador(String dni, String nombre,String departamento) {
+
+    public void setEntrevistador(String dni, String nombre,String departamento) {
         Entrevistador p=new Entrevistador(dni, nombre,departamento);
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        session.save(p);
+        Transaction tx=this.hibernateSession.beginTransaction();
+        this.hibernateSession.save(p);
         tx.commit();
     }
-    
-     public static void eliminarEntrevistador(int id) {
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("delete Entrevistador where id= :ident");
+
+     public void eliminarEntrevistador(int id) {
+        Transaction tx=this.hibernateSession.beginTransaction();
+        Query q=this.hibernateSession.createQuery("delete Entrevistador where id= :ident");
         q.setParameter("ident", id);
         q.executeUpdate();
         tx.commit();
     }
 
-    public static void actualizarEntrevistador(int id,String nombreAntiguo,String dni2, String nombre2,String departamento2) {
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("update Entrevistador set dni=:dn,nombre=:name,departamento=dpto where id=:ident ");
+    public void actualizarEntrevistador(int id,String nombreAntiguo,String dni2, String nombre2,String departamento2) {
+        Transaction tx=this.hibernateSession.beginTransaction();
+        Query q=this.hibernateSession.createQuery("update Entrevistador set dni=:dn,nombre=:name,departamento=dpto where id=:ident ");
         q.setParameter("name", nombre2);
         q.setParameter("dpto", departamento2);
         q.setParameter("name2", nombreAntiguo);
@@ -131,46 +136,55 @@ public class DBController {
         tx.commit();
     }
 
+    public Entrevistador getEntrevistador(int id){
+        Transaction tx = this.hibernateSession.beginTransaction();
+        Query q = this.hibernateSession.createQuery("From Entrevistador where id='"+id+"'");
+        Entrevistador entrevistador = (Entrevistador) q.list().get(0);
+        tx.commit();
+        return entrevistador;
+    }
+
     //Entrevistados
-    
-    public static List<Entrevistado> consultarEntrevistados() {
+
+    public List<Entrevistado> getEntrevistados() {
         List<Entrevistado>lista=new ArrayList();
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("From Entrevistado");
+        Transaction tx=this.hibernateSession.beginTransaction();
+        Query q=this.hibernateSession.createQuery("From Entrevistado");
         lista=q.list();
         tx.commit();
         return lista;
     }
-    
-    public static void altaEntrevistado(String dni, String nombre) {
+
+    public void setEntrevistado(String dni, String nombre) {
         Entrevistado p=new Entrevistado(dni, nombre);
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        session.save(p);
+        Transaction tx=this.hibernateSession.beginTransaction();
+        this.hibernateSession.save(p);
         tx.commit();
     }
-    
-     public static void eliminarEntrevistado(int id) {
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("delete Entrevistado where id= :ident");
+
+     public void deleteEntrevistado(int id) {
+        Transaction tx=this.hibernateSession.beginTransaction();
+        Query q=this.hibernateSession.createQuery("delete Entrevistado where id= :ident");
         q.setParameter("ident", id);
         q.executeUpdate();
         tx.commit();
     }
 
-    public static void actualizarEntrevistado(int id,String nombreAntiguo,String dni2, String nombre2) {
-        Session session=HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx=session.beginTransaction();
-        Query q=session.createQuery("update Entrevistado set dni=:dn,nombre=:name where id=:ident ");
+    public void updateEntrevistado(int id,String nombreAntiguo,String dni2, String nombre2) {
+        Transaction tx=this.hibernateSession.beginTransaction();
+        Query q=this.hibernateSession.createQuery("update Entrevistado set dni=:dn,nombre=:name where id=:ident ");
         q.setParameter("name", nombre2);
         q.setParameter("ident", id);
         q.setParameter("dn", dni2);
-        
         q.executeUpdate();
         tx.commit();
     }
 
-    
+    public Entrevistado getEntrevistado(int id){
+        Transaction tx = this.hibernateSession.beginTransaction();
+        Query q = this.hibernateSession.createQuery("From Entrevistado where id='"+id+"'");
+        Entrevistado entrevistado = (Entrevistado) q.list().get(0);
+        tx.commit();
+        return entrevistado;
+    }
 }
