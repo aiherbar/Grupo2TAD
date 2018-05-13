@@ -58,12 +58,21 @@ public class MainMenu {
         });  
         menu.addComponent(draggable);
 
+        Button management = new Button("Gestión");
+        management.setIcon(FontAwesome.TABLE);
+        management.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+        management.addClickListener( e -> {
+            mainLayout.removeAllComponents();
+            mainLayout.addComponent(managementView.getMain());
+        });  
+        
+        menu.addComponent(management);
+        
         Button logOut = new Button("Log Out");
         logOut.setIcon(FontAwesome.ARROW_LEFT);
         logOut.setPrimaryStyleName(ValoTheme.MENU_ITEM);
         logOut.addClickListener( e -> {
-            mainLayout.removeAllComponents();
-            mainLayout.addComponent(managementView.getMain());
+            //Log out aqui
         });  
         
         menu.addComponent(logOut);
