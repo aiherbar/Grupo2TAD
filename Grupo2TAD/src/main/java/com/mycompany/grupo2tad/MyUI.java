@@ -56,6 +56,7 @@ public class MyUI extends UI {
             }
         });
 
+        menu.setSession(session);
         form.addComponents(tituloLogin, usuario, password, login);
         loginLayout.addComponent(form);
         setContent(loginLayout);
