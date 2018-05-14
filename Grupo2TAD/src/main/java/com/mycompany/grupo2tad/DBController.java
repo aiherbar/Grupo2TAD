@@ -25,7 +25,7 @@ public class DBController {
        private static DBController instance = null;
 
     private DBController() {
-        this.hibernateSession = HibernateUtil.getSessionFactory().getCurrentSession();
+        this.hibernateSession = HibernateUtil.getSessionFactory().openSession();
     }
 
     public static DBController getInstance(){
@@ -33,6 +33,10 @@ public class DBController {
             instance = new DBController();
         }
         return instance;
+    }
+    
+    public void closeInstance(){
+        this.hibernateSession.close();
     }
     //Entrevistas
 
@@ -45,14 +49,14 @@ public class DBController {
         return lista;
     }
 
-    public void setEntrevista(int id_entrevistado, int id_entrevistador, byte apto,Date fecha,String lugar) {
+    public void setEntrevista(int id_entrevistado, int id_entrevistador, String apto,Date fecha,String lugar) {
         Entrevista p=new Entrevista(id_entrevistado, id_entrevistador,apto,fecha,lugar);
         Transaction tx=this.hibernateSession.beginTransaction();
         this.hibernateSession.save(p);
         tx.commit();
     }
 
-     public void edeleteEntrevista(int id) {
+     public void deleteEntrevista(int id) {
         Transaction tx=this.hibernateSession.beginTransaction();
         Query q=this.hibernateSession.createQuery("delete Entrevista where id= :ident");
         q.setParameter("ident", id);
@@ -60,9 +64,9 @@ public class DBController {
         tx.commit();
     }
 
-    public void updateEntrevista(int id,int id_entrevistado, int id_entrevistador, byte apto,Date fecha,String lugar) {
+    public void updateEntrevista(int id,int id_entrevistado, int id_entrevistador, String apto,Date fecha,String lugar) {
         Transaction tx=this.hibernateSession.beginTransaction();
-        Query q=this.hibernateSession.createQuery("update Entrevista set id_entrevistado=:idendo,id_entrevistador=:identa,apto=apt,fecha=date,lugar=place where id= :ident ");
+        Query q=this.hibernateSession.createQuery("update Entrevista set id_entrevistado=:idendo,id_entrevistador=:identa,apto:=apt,fecha:=date,lugar=place where id= :ident ");
         q.setParameter("idendo", id_entrevistado);
         q.setParameter("identa", id_entrevistador);
         q.setParameter("apt", apto);
@@ -72,20 +76,29 @@ public class DBController {
         q.executeUpdate();
         tx.commit();
     }
+    
+    public void updateEntrevistaFecha(int id,Date fecha) {
+        Transaction tx=this.hibernateSession.beginTransaction();
+        Query q=this.hibernateSession.createQuery("update Entrevista set fecha=:date where id= :ident ");
+        q.setParameter("date", fecha);
+        q.setParameter("ident", id);
+        q.executeUpdate();
+        tx.commit();
+    }
 
-    public List<Entrevista> getEntrevistasAgendadas() {
+    public List<Entrevista> getEntrevistasConFecha() {
         List<Entrevista>lista=new ArrayList();
         Transaction tx=this.hibernateSession.beginTransaction();
-        Query q=this.hibernateSession.createQuery("From Entrevista where fecha=''");
+        Query q=this.hibernateSession.createQuery("From Entrevista where fecha!='0000-00-00 00:00:00'");
         lista=q.list();
         tx.commit();
         return lista;
     }
 
-    public List<Entrevista> getEntrevistasNoAgendadas() {
+    public List<Entrevista> getEntrevistasSinFecha() {
         List<Entrevista>lista=new ArrayList();
         Transaction tx=this.hibernateSession.beginTransaction();
-        Query q=this.hibernateSession.createQuery("From Entrevista where fecha!=''");
+        Query q=this.hibernateSession.createQuery("From Entrevista where fecha='0000-00-00 00:00:00'");
         lista=q.list();
         tx.commit();
         return lista;
@@ -116,7 +129,7 @@ public class DBController {
         tx.commit();
     }
 
-     public void eliminarEntrevistador(int id) {
+     public void deleteEntrevistador(int id) {
         Transaction tx=this.hibernateSession.beginTransaction();
         Query q=this.hibernateSession.createQuery("delete Entrevistador where id= :ident");
         q.setParameter("ident", id);
@@ -124,7 +137,7 @@ public class DBController {
         tx.commit();
     }
 
-    public void actualizarEntrevistador(int id,String nombreAntiguo,String dni2, String nombre2,String departamento2) {
+    public void updateEntrevistador(int id,String nombreAntiguo,String dni2, String nombre2,String departamento2) {
         Transaction tx=this.hibernateSession.beginTransaction();
         Query q=this.hibernateSession.createQuery("update Entrevistador set dni=:dn,nombre=:name,departamento=dpto where id=:ident ");
         q.setParameter("name", nombre2);
