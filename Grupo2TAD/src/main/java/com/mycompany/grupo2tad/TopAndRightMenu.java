@@ -11,6 +11,10 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import java.util.Calendar;
+import java.util.Date;
+import proyecto_tad.entity.Entrevistado;
+import proyecto_tad.entity.Entrevistador;
 
 /**
  *
@@ -27,26 +31,24 @@ public class TopAndRightMenu {
     final FormLayout formEntrevistados;
     final FormLayout formEntrevistadores;
     final FormLayout formEntrevista;
-    
-    
+
     //Datos de el formulario de Personas
     final TextField name;
-    final TextField apellidos;
     final TextField DNI;
     final TextField nameEntrevistador;
-    final TextField apellidosEntrevistador;
     final TextField DNIEntrevistador;
     final TextField Departamento;
     final Button submitInteviewer;
     final Button submitIntervied;
-    
+
     //Datos de el formulario de la entrevista
     final ComboBox entrevistadores;
     final ComboBox entrevistados;
+    final TextField Lugar;
     final Button submitInterview;
 
     private DBController controller;
-    
+
     public TopAndRightMenu() {
         controller = DBController.getInstance();
         topBar = new HorizontalLayout();
@@ -58,29 +60,27 @@ public class TopAndRightMenu {
         formEntrevistadores = new FormLayout();
         formEntrevista = new FormLayout();
 
-        
         //Crear objectos del primer formulario
         name = new TextField("Nombre");
-        apellidos = new TextField("Apellidos");
         DNI = new TextField("DNI");
         nameEntrevistador = new TextField("Nombre");
-        apellidosEntrevistador = new TextField("Apellidos");
         DNIEntrevistador = new TextField("DNI");
         Departamento = new TextField("Departamento");
         submitInteviewer = new Button("Aceptar");
         submitIntervied = new Button("Aceptar");
-        
-        
+
         //Crear objectos del segundo formulario
         entrevistadores = new ComboBox("Entrevistador");
         entrevistados = new ComboBox("Entrevistado");
+        entrevistadores.addItems(controller.getEntrevistadores());
+        entrevistados.addItems(controller.getEntrevistados());
+        Lugar = new TextField("Lugar");
         submitInterview = new Button("Aceptar");
-        
 
-        formEntrevistados.addComponents(name,apellidos,DNI,submitIntervied);
-        formEntrevistadores.addComponents(nameEntrevistador,apellidosEntrevistador,DNIEntrevistador,Departamento,submitInteviewer);
-        formEntrevista.addComponents(entrevistadores,entrevistados,submitInterview);
-        
+        formEntrevistados.addComponents(name, DNI, submitIntervied);
+        formEntrevistadores.addComponents(nameEntrevistador, DNIEntrevistador, Departamento, submitInteviewer);
+        formEntrevista.addComponents(entrevistadores, entrevistados, Lugar, submitInterview);
+
         topBar.addComponents(createInterView, createInterviwer, createIntervied);
 
         leftBar.setVisible(false);
@@ -99,32 +99,47 @@ public class TopAndRightMenu {
     private void createEvents() {
 
         createInterviwer.addClickListener(e -> {
-
-            
-                leftBar.setVisible(true);
-                leftBar.removeAllComponents();
-                leftBar.addComponent(formEntrevistadores);
-            
+            leftBar.setVisible(true);
+            leftBar.removeAllComponents();
+            leftBar.addComponent(formEntrevistadores);
 
         });
-        
-       createIntervied.addClickListener(e -> {
 
-                leftBar.setVisible(true);
-                leftBar.removeAllComponents();
-                leftBar.addComponent(formEntrevistados);
+        createIntervied.addClickListener(e -> {
 
-            
+            leftBar.setVisible(true);
+            leftBar.removeAllComponents();
+            leftBar.addComponent(formEntrevistados);
 
         });
-        
-        
+
         createInterView.addClickListener(e -> {
-                leftBar.setVisible(true);
-                leftBar.removeAllComponents();
-                leftBar.addComponent(formEntrevista);
-            
+            leftBar.setVisible(true);
+            leftBar.removeAllComponents();
+            leftBar.addComponent(formEntrevista);
 
+        });
+
+        submitInteviewer.addClickListener(e -> {
+            if (!DNIEntrevistador.getValue().isEmpty() && !nameEntrevistador.getValue().isEmpty() && !Departamento.getValue().isEmpty()) {
+                controller.setEntrevistador(DNIEntrevistador.getValue(), nameEntrevistador.getValue(), Departamento.getValue());
+            }
+
+        });
+
+        submitIntervied.addClickListener(e -> {
+            if (!DNI.getValue().isEmpty() && !name.getValue().isEmpty()) {
+                controller.setEntrevistado(DNI.getValue(), name.getValue());
+            }
+        });
+
+        submitInterview.addClickListener(e -> {
+
+            if (entrevistadores.getValue() != null && entrevistados.getValue() != null && !Lugar.getValue().isEmpty()) {
+                Entrevistador entrevistador = (Entrevistador) entrevistadores.getValue();
+                Entrevistado entrevistado = (Entrevistado) entrevistados.getValue();
+                controller.setEntrevista(entrevistado.getId(), entrevistador.getId(), "", Lugar.getValue());
+            }
         });
     }
 

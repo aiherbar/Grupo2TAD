@@ -12,6 +12,9 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import java.util.Date;
+import proyecto_tad.entity.Entrevista;
+import proyecto_tad.entity.Entrevistado;
+import proyecto_tad.entity.Entrevistador;
 
 /**
  *
@@ -40,10 +43,8 @@ public class ManagementView {
 
     //Datos de el formulario de Personas
     final TextField name;
-    final TextField apellidos;
     final TextField DNI;
     final TextField nameEntrevistador;
-    final TextField apellidosEntrevistador;
     final TextField DNIEntrevistador;
     final TextField Departamento;
     final Button updateInteviewer;
@@ -57,8 +58,10 @@ public class ManagementView {
     final Button removeInterview;
 
     private int id;
+    private DBController controller;
 
     public ManagementView() {
+        controller = DBController.getInstance();
         this.main = new HorizontalLayout();
         //Setear tablas
         this.tableInterviews = new Table();
@@ -81,10 +84,8 @@ public class ManagementView {
 
         //Crear objectos del primer formulario
         name = new TextField("Nombre");
-        apellidos = new TextField("Apellidos");
         DNI = new TextField("DNI");
         nameEntrevistador = new TextField("Nombre");
-        apellidosEntrevistador = new TextField("Apellidos");
         DNIEntrevistador = new TextField("DNI");
         Departamento = new TextField("Departamento");
         updateInteviewer = new Button("Modificar");
@@ -98,9 +99,10 @@ public class ManagementView {
         removeInterview = new Button("Borrar");
 
         this.setButtonEvents();
+
         //Crear formularios
-        formEntrevistados.addComponents(name, apellidos, DNI, updateIntervied, removeIntervied);
-        formEntrevistadores.addComponents(nameEntrevistador, apellidosEntrevistador, DNIEntrevistador, Departamento, updateInteviewer, removeInteviewer);
+        formEntrevistados.addComponents(name, DNI, updateIntervied, removeIntervied);
+        formEntrevistadores.addComponents(nameEntrevistador, DNIEntrevistador, Departamento, updateInteviewer, removeInteviewer);
         formEntrevista.addComponents(apto, updateInterview, removeInterview);
 
         formEntrevista.setVisible(false);
@@ -120,61 +122,75 @@ public class ManagementView {
 
     private void setTables() {
 
+        //Entrevistas
         tableInterviews.addContainerProperty("Entrevistador", Object.class, null);
         tableInterviews.addContainerProperty("Entrevistado", Object.class, null);
         tableInterviews.addContainerProperty("Lugar", String.class, null);
         tableInterviews.addContainerProperty("Fecha", Date.class, null);
         tableInterviews.addContainerProperty("Apto", String.class, null);
-        tableInterviews.setVisible(false);
+        tableInterviews.addContainerProperty("Id", Integer.class, null);
 
         tableInterviews.addItemClickListener(e -> {
-
             rightBar.setVisible(true);
             formEntrevista.setVisible(true);
             formEntrevistadores.setVisible(false);
             formEntrevistados.setVisible(false);
-            id = (int) tableInterviews.getValue();
+            id = (Integer) e.getItem().getItemProperty("Id").getValue();
             apto.setValue((String) e.getItem().getItemProperty("Apto").getValue());
 
         });
 
+        //Entrevistadores
         tableInterviewers.addContainerProperty("Nombre", String.class, null);
-        tableInterviewers.addContainerProperty("Apellidos", String.class, null);
         tableInterviewers.addContainerProperty("DNI", String.class, null);
-        tableInterviewers.addContainerProperty("Departamento", Date.class, null);
-
+        tableInterviewers.addContainerProperty("Departamento", String.class, null);
+        tableInterviewers.addContainerProperty("Id", Integer.class, null);
         tableInterviewers.addItemClickListener(e -> {
             rightBar.setVisible(true);
             formEntrevista.setVisible(false);
             formEntrevistadores.setVisible(true);
             formEntrevistados.setVisible(false);
-            id = (int) tableInterviewers.getValue();
+            id = (Integer) e.getItem().getItemProperty("Id").getValue();
 
             nameEntrevistador.setValue((String) e.getItem().getItemProperty("Nombre").getValue());
-            apellidosEntrevistador.setValue((String) e.getItem().getItemProperty("Apellidos").getValue());
             DNIEntrevistador.setValue((String) e.getItem().getItemProperty("DNI").getValue());
             Departamento.setValue((String) e.getItem().getItemProperty("Departamento").getValue());
         });
 
+        //Entrevistados
         tableIntervieweds.addContainerProperty("Nombre", String.class, null);
-        tableIntervieweds.addContainerProperty("Apellidos", String.class, null);
         tableIntervieweds.addContainerProperty("DNI", String.class, null);
-        tableIntervieweds.setVisible(false);
+        tableIntervieweds.addContainerProperty("Id", Integer.class, null);
         tableIntervieweds.addItemClickListener(e -> {
             rightBar.setVisible(true);
             formEntrevista.setVisible(false);
             formEntrevistadores.setVisible(false);
             formEntrevistados.setVisible(true);
-            id = (int) tableIntervieweds.getValue();
+            id = (Integer) e.getItem().getItemProperty("Id").getValue();
 
             name.setValue((String) e.getItem().getItemProperty("Nombre").getValue());
-            apellidos.setValue((String) e.getItem().getItemProperty("Apellidos").getValue());
             DNI.setValue((String) e.getItem().getItemProperty("DNI").getValue());
         });
+//Configuracion de las tablas
+        tableIntervieweds.setVisible(false);
+        tableInterviewers.setVisible(false);
+        tableInterviews.setVisible(true);
+
+        tableIntervieweds.setSelectable(true);
+        tableInterviewers.setSelectable(true);
+        tableInterviews.setSelectable(true);
 
         tableIntervieweds.setSizeFull();
         tableInterviewers.setSizeFull();
         tableInterviews.setSizeFull();
+
+        tableIntervieweds.setImmediate(true);
+        tableInterviewers.setImmediate(true);
+        tableInterviews.setImmediate(true);
+        //Generar datos
+        this.generateTableIntervieweds();
+        this.generateTableInterviewers();
+        this.generateTableInterviews();
     }
 
     private void setUpperButtons() {
@@ -202,45 +218,89 @@ public class ManagementView {
         //Añadir filas aqui
         //obtener lista de base de datos
         //recorrer lista y rellenar tabla
-        tableInterviews.addItem(new Object[]{
-            "Entrevistador",
-            "Entrevistado",
-            "lugar",
-            "fecha"
+//        tableInterviews.setVisibleColumns("Entrevistador", "Entrevistado", "Lugar", "Fecha", "Apto", "Id");
+//        tableInterviews.removeAllItems();
+        for (Entrevista entrevista : controller.getEntrevistas()) {
+            tableInterviews.addItem(new Object[]{
+                controller.getEntrevistador(entrevista.getIdEntrevistador()),
+                controller.getEntrevistado(entrevista.getIdEntrevistado()),
+                entrevista.getLugar(),
+                entrevista.getFecha(),
+                entrevista.getApto(),
+                entrevista.getId()
 
-        }, 2);
+            }, entrevista.getId());
+
+        }
+        tableInterviews.setVisibleColumns("Entrevistador", "Entrevistado", "Lugar", "Fecha", "Apto");
 
     }
 
     public void generateTableInterviewers() {
 
         //Añadir filas aqui
+//        tableInterviewers.setVisibleColumns("Nombre", "DNI", "Departamento", "Id");
+//        tableInterviewers.removeAllItems();
+        for (Entrevistador entrevistador : controller.getEntrevistadores()) {
+            tableInterviewers.addItem(new Object[]{
+                entrevistador.getNombre(),
+                entrevistador.getDni(),
+                entrevistador.getDepartamento(),
+                entrevistador.getId()
+            }, entrevistador.getId());
+        }
+        tableInterviewers.setVisibleColumns("Nombre", "DNI", "Departamento");
     }
 
     public void generateTableIntervieweds() {
 
         //Añadir filas aqui
+//        tableIntervieweds.setVisibleColumns("Nombre", "DNI", "Id");
+//        tableInterviewers.removeAllItems();
+        for (Entrevistado entrevistado : controller.getEntrevistados()) {
+            tableIntervieweds.addItem(new Object[]{
+                entrevistado.getNombre(),
+                entrevistado.getDni(),
+                entrevistado.getId()
+            }, entrevistado.getId());
+        }
+        tableIntervieweds.setVisibleColumns("Nombre", "DNI");
     }
 
     private void setButtonEvents() {
 
         updateInteviewer.addClickListener(e -> {
             String name = nameEntrevistador.getValue();
-            String surname = apellidosEntrevistador.getValue();
             String dni = DNIEntrevistador.getValue();
             String departamento = Departamento.getValue();
+   
+            controller.updateEntrevistador(id, dni, name, departamento);
+//            this.generateTableInterviewers();
 
         });
-        updateInteviewer.addClickListener(e -> {
+        updateInterview.addClickListener(e -> {
+            String apto = this.apto.getValue();
+            controller.updateEntrevistaApto(id, apto);
+//            this.generateTableInterviews();
         });
         updateIntervied.addClickListener(e -> {
+            String name = this.name.getValue();
+            String dni = this.DNI.getValue();
+            controller.updateEntrevistado(id, dni, name);
+//            this.generateTableIntervieweds();
         });
 
         removeInteviewer.addClickListener(e -> {
+            controller.deleteEntrevistador(id);
+//            this.generateTableInterviewers();
         });
-        removeInteviewer.addClickListener(e -> {
+        removeInterview.addClickListener(e -> {
+            controller.deleteEntrevista(id);
+//            this.generateTableInterviews();
         });
         removeIntervied.addClickListener(e -> {
+            controller.deleteEntrevistado(id);
+//            this.generateTableIntervieweds();
         });
 
     }
