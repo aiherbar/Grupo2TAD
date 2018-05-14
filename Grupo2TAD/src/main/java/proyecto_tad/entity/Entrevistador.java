@@ -52,6 +52,11 @@ public class Entrevistador  implements java.io.Serializable {
         this.departamento = departamento;
     }
 
+    @Override
+    public String toString() {
+        return "Entrevistador{" + "id=" + id + ", nombre=" + nombre + '}';
+    }
+
 
 
 

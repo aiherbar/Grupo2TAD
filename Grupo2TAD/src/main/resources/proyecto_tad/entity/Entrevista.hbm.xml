@@ -14,13 +14,13 @@
         <property name="idEntrevistador" type="int">
             <column name="id_entrevistador" not-null="true" />
         </property>
-        <property name="apto" type="byte">
+        <property name="apto" type="string">
             <column name="apto" not-null="true">
-                <comment>0: No apto; 1: Apto</comment>
+                <comment>No apto;Apto</comment>
             </column>
         </property>
-        <property name="fecha" type="date">
-            <column name="fecha" length="10" not-null="true" />
+        <property name="fecha" type="timestamp">
+            <column name="fecha" length="20" not-null="false" />
         </property>
         <property name="lugar" type="string">
             <column name="lugar" length="40" not-null="true" />
