@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import proyecto_tad.entity.Entrevista;
@@ -50,9 +51,12 @@ public class DBController {
     }
 
     public void setEntrevista(int id_entrevistado, int id_entrevistador, String apto,String lugar) {
-        Entrevista p=new Entrevista(id_entrevistado, id_entrevistador,apto,lugar);
+       // Entrevista p=new Entrevista(id_entrevistado, id_entrevistador,apto,lugar);
+       
         Transaction tx=this.hibernateSession.beginTransaction();
-        this.hibernateSession.save(p);
+       // this.hibernateSession.save(p);
+        Query q = hibernateSession.createSQLQuery("INSERT INTO entrevista (id,id_entrevistado,id_entrevistador,apto,fecha,lugar) VALUES (NULL, '"+id_entrevistado+"', '"+id_entrevistador+"', '', '0000-00-00 00:00:00.000000', '"+lugar+"');");
+        q.executeUpdate();
         tx.commit();
     }
 
