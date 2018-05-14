@@ -177,6 +177,22 @@ public class DBController {
         hibernateSession.refresh(entrevistador);
         return entrevistador;
     }
+    
+    public long getAptosEntrevistador(int id){
+        return (long) hibernateSession.createQuery("select count(*) from Entrevista where id_entrevistador="+id+" and apto='Apto'").uniqueResult();    
+    }
+    
+    public long getNoAptosInvestigador(int id){
+        return (long) hibernateSession.createQuery("select count(*) from Entrevista where id_entrevistador="+id+" and apto='No Apto'").uniqueResult();    
+    }
+    
+    public long getAptos(){
+        return (long) hibernateSession.createQuery("select count(*) from Entrevista where apto='Apto'").uniqueResult();  
+    }
+    
+    public long getNoAptos(){
+        return (long) hibernateSession.createQuery("select count(*) from Entrevista where apto='No Apto'").uniqueResult();    
+    }
 
     //Entrevistados
     public List<Entrevistado> getEntrevistados() {
