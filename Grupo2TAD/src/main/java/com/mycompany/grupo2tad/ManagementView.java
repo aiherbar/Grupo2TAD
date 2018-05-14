@@ -219,7 +219,7 @@ public class ManagementView {
         //obtener lista de base de datos
         //recorrer lista y rellenar tabla
 //        tableInterviews.setVisibleColumns("Entrevistador", "Entrevistado", "Lugar", "Fecha", "Apto", "Id");
-//        tableInterviews.removeAllItems();
+        tableInterviews.removeAllItems();
         for (Entrevista entrevista : controller.getEntrevistas()) {
             tableInterviews.addItem(new Object[]{
                 controller.getEntrevistador(entrevista.getIdEntrevistador()),
@@ -232,7 +232,7 @@ public class ManagementView {
             }, entrevista.getId());
 
         }
-        tableInterviews.setVisibleColumns("Entrevistador", "Entrevistado", "Lugar", "Fecha", "Apto");
+       // tableInterviews.setVisibleColumns("Entrevistador", "Entrevistado", "Lugar", "Fecha", "Apto");
 
     }
 
@@ -240,7 +240,7 @@ public class ManagementView {
 
         //Añadir filas aqui
 //        tableInterviewers.setVisibleColumns("Nombre", "DNI", "Departamento", "Id");
-//        tableInterviewers.removeAllItems();
+        tableInterviewers.removeAllItems();
         for (Entrevistador entrevistador : controller.getEntrevistadores()) {
             tableInterviewers.addItem(new Object[]{
                 entrevistador.getNombre(),
@@ -249,14 +249,14 @@ public class ManagementView {
                 entrevistador.getId()
             }, entrevistador.getId());
         }
-        tableInterviewers.setVisibleColumns("Nombre", "DNI", "Departamento");
+        //tableInterviewers.setVisibleColumns("Nombre", "DNI", "Departamento");
     }
 
     public void generateTableIntervieweds() {
 
         //Añadir filas aqui
 //        tableIntervieweds.setVisibleColumns("Nombre", "DNI", "Id");
-//        tableInterviewers.removeAllItems();
+        tableIntervieweds.removeAllItems();
         for (Entrevistado entrevistado : controller.getEntrevistados()) {
             tableIntervieweds.addItem(new Object[]{
                 entrevistado.getNombre(),
@@ -264,7 +264,7 @@ public class ManagementView {
                 entrevistado.getId()
             }, entrevistado.getId());
         }
-        tableIntervieweds.setVisibleColumns("Nombre", "DNI");
+       // tableIntervieweds.setVisibleColumns("Nombre", "DNI");
     }
 
     private void setButtonEvents() {
@@ -275,32 +275,32 @@ public class ManagementView {
             String departamento = Departamento.getValue();
    
             controller.updateEntrevistador(id, dni, name, departamento);
-//            this.generateTableInterviewers();
+           this.generateTableInterviewers();
 
         });
         updateInterview.addClickListener(e -> {
             String apto = this.apto.getValue();
             controller.updateEntrevistaApto(id, apto);
-//            this.generateTableInterviews();
+           this.generateTableInterviews();
         });
         updateIntervied.addClickListener(e -> {
             String name = this.name.getValue();
             String dni = this.DNI.getValue();
             controller.updateEntrevistado(id, dni, name);
-//            this.generateTableIntervieweds();
+            this.generateTableIntervieweds();
         });
 
         removeInteviewer.addClickListener(e -> {
             controller.deleteEntrevistador(id);
-//            this.generateTableInterviewers();
+           this.generateTableInterviewers();
         });
         removeInterview.addClickListener(e -> {
             controller.deleteEntrevista(id);
-//            this.generateTableInterviews();
+          this.generateTableInterviews();
         });
         removeIntervied.addClickListener(e -> {
             controller.deleteEntrevistado(id);
-//            this.generateTableIntervieweds();
+           this.generateTableIntervieweds();
         });
 
     }

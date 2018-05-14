@@ -13,7 +13,6 @@ import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.ui.Calendar;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.calendar.CalendarComponentEvents;
@@ -32,7 +31,7 @@ public class MainView {
     final Calendar cal;
     final TopAndRightMenu top;
     final HorizontalLayout main;
-    final Table interviews;
+    final  Table interviews;
 
     private DBController controller;
 
@@ -127,7 +126,10 @@ public class MainView {
         
         controller.updateEntrevistaFecha((int)transferable.getItemId(), dropTime);
 
+        Entrevista e = controller.getEntrevista((int)transferable.getItemId());
         BasicEventProvider ep = (BasicEventProvider) details.getTargetCalendar().getEventProvider();
         ep.addEvent(newEvent);
     }
+    
+
 }
