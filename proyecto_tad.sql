@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.8.0
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 11-05-2018 a las 18:35:06
--- Versión del servidor: 10.1.30-MariaDB
--- Versión de PHP: 7.0.27
+-- Servidor: localhost
+-- Tiempo de generación: 14-05-2018 a las 11:01:01
+-- Versión del servidor: 10.1.31-MariaDB
+-- Versión de PHP: 5.6.35
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -35,10 +35,18 @@ CREATE TABLE `entrevista` (
   `id` int(11) NOT NULL,
   `id_entrevistado` int(11) NOT NULL,
   `id_entrevistador` int(11) NOT NULL,
-  `apto` tinyint(4) NOT NULL COMMENT '0: No apto; 1: Apto',
-  `fecha` date NOT NULL,
+  `apto` varchar(10) NOT NULL COMMENT 'No apto;Apto',
+  `fecha` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `lugar` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `entrevista`
+--
+
+INSERT INTO `entrevista` (`id`, `id_entrevistado`, `id_entrevistador`, `apto`, `fecha`, `lugar`) VALUES
+(1, 1, 1, '', '0000-00-00 00:00:00', 'Sevilla'),
+(10, 2, 1, '', '0000-00-00 00:00:00', 'Madrid');
 
 -- --------------------------------------------------------
 
@@ -52,6 +60,14 @@ CREATE TABLE `entrevistado` (
   `dni` varchar(10) NOT NULL,
   `nombre` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `entrevistado`
+--
+
+INSERT INTO `entrevistado` (`id`, `dni`, `nombre`) VALUES
+(1, '98798234S', 'Juan Perez'),
+(2, '54883355Z', 'Julian Cano');
 
 -- --------------------------------------------------------
 
@@ -104,13 +120,13 @@ ALTER TABLE `entrevistador`
 -- AUTO_INCREMENT de la tabla `entrevista`
 --
 ALTER TABLE `entrevista`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `entrevistado`
 --
 ALTER TABLE `entrevistado`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `entrevistador`

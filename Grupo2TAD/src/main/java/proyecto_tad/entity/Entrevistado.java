@@ -43,8 +43,10 @@ public class Entrevistado  implements java.io.Serializable {
         this.nombre = nombre;
     }
 
-
-
+    @Override
+    public String toString() {
+        return nombre + " ("+ dni +")";
+    }
 
 }
 

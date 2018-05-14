@@ -13,14 +13,14 @@ public class Entrevista  implements java.io.Serializable {
      private Integer id;
      private int idEntrevistado;
      private int idEntrevistador;
-     private byte apto;
+     private String apto;
      private Date fecha;
      private String lugar;
 
     public Entrevista() {
     }
 
-    public Entrevista(int idEntrevistado, int idEntrevistador, byte apto, Date fecha, String lugar) {
+    public Entrevista(int idEntrevistado, int idEntrevistador, String apto, Date fecha, String lugar) {
        this.idEntrevistado = idEntrevistado;
        this.idEntrevistador = idEntrevistador;
        this.apto = apto;
@@ -49,11 +49,11 @@ public class Entrevista  implements java.io.Serializable {
     public void setIdEntrevistador(int idEntrevistador) {
         this.idEntrevistador = idEntrevistador;
     }
-    public byte getApto() {
+    public String getApto() {
         return this.apto;
     }
     
-    public void setApto(byte apto) {
+    public void setApto(String apto) {
         this.apto = apto;
     }
     public Date getFecha() {

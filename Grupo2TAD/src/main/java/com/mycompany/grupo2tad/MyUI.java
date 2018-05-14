@@ -37,7 +37,7 @@ public class MyUI extends UI {
     final HorizontalLayout main = new HorizontalLayout(); 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-            main.addComponents(menu.getMenu(),menu.getCurrent());
+        main.addComponents(menu.getMenu(),menu.getCurrent());
         
         WrappedSession session = getSession().getSession();
      
@@ -60,26 +60,9 @@ public class MyUI extends UI {
         loginLayout.addComponent(form);
         setContent(loginLayout);
         
-    
-
-        
-      
-
-//        final VerticalLayout layout = new VerticalLayout();
-//        MainMenu menu = new MainMenu();
-//        final TextField name = new TextField();
-//        name.setCaption("Type your name here:");
-//
-//        Button button = new Button("Click Me");
-//        button.addClickListener( e -> {
-//            layout.addComponent(new Label("Thanks " + name.getValue() 
-//                    + ", it works!"));
-//        });
-//        
-//        layout.addComponents(menu.getBarmenu(),name, button);
-//        layout.setMargin(true);
-//        layout.setSpacing(true);
-//        
+        addDetachListener((e) -> {
+            DBController.getInstance().closeInstance();
+        });
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
