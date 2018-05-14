@@ -20,9 +20,12 @@ import com.vaadin.ui.components.calendar.CalendarComponentEvents;
 import com.vaadin.ui.components.calendar.CalendarTargetDetails;
 import com.vaadin.ui.components.calendar.event.BasicEvent;
 import com.vaadin.ui.components.calendar.event.BasicEventProvider;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import proyecto_tad.entity.Entrevista;
+import proyecto_tad.entity.Entrevistado;
+import proyecto_tad.entity.Entrevistador;
 
 public class MainView {
 
@@ -30,7 +33,7 @@ public class MainView {
     final TopAndRightMenu top;
     final HorizontalLayout main;
     final Table interviews;
-    
+
     private DBController controller;
 
     public MainView() {
@@ -39,22 +42,33 @@ public class MainView {
         this.main = new HorizontalLayout();
         this.interviews = new Table("Entrevistas");
 
-        this.interviews.addContainerProperty("Entrevistado", Object.class, null);
-        this.interviews.addContainerProperty("Entrevistador", Object.class, null);
+        this.interviews.addContainerProperty("Entrevistado", Entrevistado.class, null);
+        this.interviews.addContainerProperty("Entrevistador", Entrevistador.class, null);
         this.interviews.addContainerProperty("Lugar", String.class, null);
 
-        List<Entrevista> entrevistas = controller.getEntrevistasNoAgendadas();
+        List<Entrevista> entrevistas = controller.getEntrevistasSinFecha();
         for (Entrevista entrevista : entrevistas) {
-            
+            this.interviews.addItem(new Object[]{controller.getEntrevistado(entrevista.getIdEntrevistado()), controller.getEntrevistador(entrevista.getIdEntrevistador()), entrevista.getLugar()}, entrevista.getId());
         }
-        this.interviews.addItem(new Object[]{"Pepe", "Ramiro", "Madrid"}, 1);
-        this.interviews.addItem(new Object[]{"Luis", "Ramiro", "Madrid"}, 2);
-        this.interviews.addItem(new Object[]{"Raquel", "Juan", "Jaen"}, 3);
 
         this.interviews.setDragMode(Table.TableDragMode.ROW);
         this.interviews.setPageLength(this.interviews.size());
 
         this.cal = new Calendar();
+        entrevistas = controller.getEntrevistasConFecha();
+        for (Entrevista entrevista : entrevistas) {
+            BasicEvent newEvent = new BasicEvent();
+            String s = String.format("%04d", entrevista.getId());
+            newEvent.setCaption("Entrevista con " + controller.getEntrevistado(entrevista.getIdEntrevistado())+" ("+ String.format("%04d", entrevista.getId()) +")");
+            newEvent.setDescription("Entrevistador: " + controller.getEntrevistador(entrevista.getIdEntrevistador()) + " "
+                    + "Lugar: " + entrevista.getLugar());
+            newEvent.setStart(entrevista.getFecha());
+            java.util.Calendar calendar = java.util.Calendar.getInstance();
+            calendar.setTime(entrevista.getFecha());
+            calendar.add(java.util.Calendar.MINUTE, 60);
+            newEvent.setEnd(calendar.getTime());
+            cal.addEvent(newEvent);
+        }
         cal.setDropHandler(new DropHandler() {
             public AcceptCriterion getAcceptCriterion() {
                 return AcceptAll.get();
@@ -75,7 +89,9 @@ public class MainView {
             public void componentEvent(Component.Event event) {
                 CalendarComponentEvents.MoveEvent calevent = (CalendarComponentEvents.MoveEvent) event;
                 if (calevent.getNewStart() != null) {
-                    Notification.show("nueva fecha: " + calevent.getNewStart().toString());
+                    int id = Integer.parseInt(calevent.getCalendarEvent().getCaption().substring(calevent.getCalendarEvent().getCaption().length()-5, calevent.getCalendarEvent().getCaption().length()-1));
+                    
+                    controller.updateEntrevistaFecha(id, calevent.getNewStart());
                 }
             }
         });
@@ -95,18 +111,21 @@ public class MainView {
         Date endTime = timeCalendar.getTime();
 
         Item draggedItem = transferable.getSourceComponent().getItem(transferable.getItemId());
+        
+        String eventType = "Entrevista con " + draggedItem.getItemProperty("Entrevistado").getValue().toString()+" ("+ String.format("%04d", transferable.getItemId()) +")";
 
-        String eventType = "Entrevista con " + (String) draggedItem.getItemProperty("Entrevistado").getValue();
-
-        String eventDescription = "Entrevistador: " + (String) draggedItem.getItemProperty("Entrevistador").getValue() + " "
+        String eventDescription = "Entrevistador: " + (String) draggedItem.getItemProperty("Entrevistador").getValue().toString() + " "
                 + "Lugar: " + (String) draggedItem.getItemProperty("Lugar").getValue();
 
+        Collection c = draggedItem.getItemPropertyIds();
         BasicEvent newEvent = new BasicEvent();
         newEvent.setAllDay(!details.hasDropTime());
         newEvent.setCaption(eventType);
         newEvent.setDescription(eventDescription);
         newEvent.setStart(dropTime);
         newEvent.setEnd(endTime);
+        
+        controller.updateEntrevistaFecha((int)transferable.getItemId(), dropTime);
 
         BasicEventProvider ep = (BasicEventProvider) details.getTargetCalendar().getEventProvider();
         ep.addEvent(newEvent);

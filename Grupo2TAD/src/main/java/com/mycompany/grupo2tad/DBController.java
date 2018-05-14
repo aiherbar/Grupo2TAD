@@ -34,6 +34,10 @@ public class DBController {
         }
         return instance;
     }
+    
+    public void closeInstance(){
+        this.hibernateSession.close();
+    }
     //Entrevistas
 
     public List<Entrevista> getEntrevistas() {
@@ -78,20 +82,29 @@ public class DBController {
         q.executeUpdate();
         tx.commit();
     }
+    
+    public void updateEntrevistaFecha(int id,Date fecha) {
+        Transaction tx=this.hibernateSession.beginTransaction();
+        Query q=this.hibernateSession.createQuery("update Entrevista set fecha=:date where id= :ident ");
+        q.setParameter("date", fecha);
+        q.setParameter("ident", id);
+        q.executeUpdate();
+        tx.commit();
+    }
 
-    public List<Entrevista> getEntrevistasAgendadas() {
+    public List<Entrevista> getEntrevistasConFecha() {
         List<Entrevista>lista=new ArrayList();
         Transaction tx=this.hibernateSession.beginTransaction();
-        Query q=this.hibernateSession.createQuery("From Entrevista where fecha=''");
+        Query q=this.hibernateSession.createQuery("From Entrevista where fecha!='0000-00-00 00:00:00'");
         lista=q.list();
         tx.commit();
         return lista;
     }
 
-    public List<Entrevista> getEntrevistasNoAgendadas() {
+    public List<Entrevista> getEntrevistasSinFecha() {
         List<Entrevista>lista=new ArrayList();
         Transaction tx=this.hibernateSession.beginTransaction();
-        Query q=this.hibernateSession.createQuery("From Entrevista where fecha!=''");
+        Query q=this.hibernateSession.createQuery("From Entrevista where fecha='0000-00-00 00:00:00'");
         lista=q.list();
         tx.commit();
         return lista;

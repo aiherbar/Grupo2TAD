@@ -20,7 +20,7 @@
             </column>
         </property>
         <property name="fecha" type="timestamp">
-            <column name="fecha" length="20" not-null="false" />
+            <column name="fecha" length="20" not-null="true" />
         </property>
         <property name="lugar" type="string">
             <column name="lugar" length="40" not-null="true" />
