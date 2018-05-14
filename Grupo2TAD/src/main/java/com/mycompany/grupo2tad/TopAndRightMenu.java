@@ -9,6 +9,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import java.util.Calendar;
@@ -123,6 +124,11 @@ public class TopAndRightMenu {
         submitInteviewer.addClickListener(e -> {
             if (!DNIEntrevistador.getValue().isEmpty() && !nameEntrevistador.getValue().isEmpty() && !Departamento.getValue().isEmpty()) {
                 controller.setEntrevistador(DNIEntrevistador.getValue(), nameEntrevistador.getValue(), Departamento.getValue());
+                DNIEntrevistador.setValue("");
+                nameEntrevistador.setValue("");
+                Departamento.setValue("");
+                Notification.show("Entrevistador creado con exito",
+                        Notification.Type.HUMANIZED_MESSAGE);
             }
 
         });
@@ -130,6 +136,10 @@ public class TopAndRightMenu {
         submitIntervied.addClickListener(e -> {
             if (!DNI.getValue().isEmpty() && !name.getValue().isEmpty()) {
                 controller.setEntrevistado(DNI.getValue(), name.getValue());
+                DNI.setValue("");
+                name.setValue("");
+                Notification.show("Entrevistado creado con exito",
+                        Notification.Type.HUMANIZED_MESSAGE);
             }
         });
 
@@ -139,6 +149,11 @@ public class TopAndRightMenu {
                 Entrevistador entrevistador = (Entrevistador) entrevistadores.getValue();
                 Entrevistado entrevistado = (Entrevistado) entrevistados.getValue();
                 controller.setEntrevista(entrevistado.getId(), entrevistador.getId(), "", Lugar.getValue());
+                entrevistadores.select(null);
+                entrevistados.select(null);
+                Lugar.setValue("");
+                Notification.show("Entrevista creada con exito",
+                        Notification.Type.HUMANIZED_MESSAGE);
             }
         });
     }
