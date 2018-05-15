@@ -34,6 +34,7 @@ public class MainMenu {
         controller = DBController.getInstance();
         mainView = new MainView();
         menu = new CssLayout();
+        menu.addStyleName("background-menu");
         mainLayout = new HorizontalLayout();
         mainLayout.addComponent(mainView.getView());
 

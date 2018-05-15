@@ -37,6 +37,7 @@ public class MyUI extends UI {
     final HorizontalLayout main = new HorizontalLayout(); 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+        //VerticalLayout vertical = new VerticalLayout(menu.getMenu());
         main.addComponents(menu.getMenu(),menu.getCurrent());
         
         WrappedSession session = getSession().getSession();
