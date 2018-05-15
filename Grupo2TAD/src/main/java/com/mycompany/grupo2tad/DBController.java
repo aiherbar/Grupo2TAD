@@ -38,6 +38,7 @@ public class DBController {
 
     public void closeInstance() {
         this.hibernateSession.close();
+        instance = null;
     }
     //Entrevistas
 

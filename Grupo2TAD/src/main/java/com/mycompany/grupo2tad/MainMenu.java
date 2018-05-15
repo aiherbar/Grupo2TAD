@@ -6,12 +6,15 @@
 package com.mycompany.grupo2tad;
 
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.WrappedSession;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
+import java.util.List;
+import proyecto_tad.entity.Entrevista;
 
 /**
  *
@@ -20,13 +23,15 @@ import com.vaadin.ui.themes.ValoTheme;
 public class MainMenu {
 
     private final CssLayout menu;
-    private  MainView mainView;
-    private  ManagementView managementView;
-    private  ChartsView chartView;
-
+    private MainView mainView;
+    private ManagementView managementView;
+    private ChartsView chartView;
     final HorizontalLayout mainLayout;
+    private DBController controller;
+    private WrappedSession session;
 
     public MainMenu() {
+        controller = DBController.getInstance();
         mainView = new MainView();
         menu = new CssLayout();
         mainLayout = new HorizontalLayout();
@@ -74,7 +79,8 @@ public class MainMenu {
         logOut.setIcon(FontAwesome.ARROW_LEFT);
         logOut.setPrimaryStyleName(ValoTheme.MENU_ITEM);
         logOut.addClickListener(e -> {
-            //Log out aqui
+            controller.closeInstance();
+            session.invalidate();
         });
 
         menu.addComponent(logOut);
@@ -88,4 +94,10 @@ public class MainMenu {
     public HorizontalLayout getCurrent() {
         return mainLayout;
     }
+
+    public void setSession(WrappedSession session) {
+
+        this.session = session;
+    }
+
 }

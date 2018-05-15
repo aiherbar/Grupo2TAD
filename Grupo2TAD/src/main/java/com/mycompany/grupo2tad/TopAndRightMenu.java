@@ -14,6 +14,8 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import proyecto_tad.entity.Entrevista;
 import proyecto_tad.entity.Entrevistado;
 import proyecto_tad.entity.Entrevistador;
 
@@ -154,8 +156,19 @@ public class TopAndRightMenu {
                 Lugar.setValue("");
                 Notification.show("Entrevista creada con exito",
                         Notification.Type.HUMANIZED_MESSAGE);
+                resetInterviewTable();
             }
         });
+    }
+
+    private void resetInterviewTable() {
+        List<Entrevista> entrevistas = controller.getEntrevistasSinFecha();
+        MainView.interviews.removeAllItems();
+        for (Entrevista entrevista : entrevistas) {
+            MainView.interviews.addItem(new Object[]{controller.getEntrevistado(entrevista.getIdEntrevistado()), controller.getEntrevistador(entrevista.getIdEntrevistador()), entrevista.getLugar()}, entrevista.getId());
+        }
+                MainView.interviews.setPageLength(MainView.interviews.size());
+
     }
 
 }

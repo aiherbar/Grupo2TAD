@@ -31,7 +31,7 @@ public class MainView {
     final Calendar cal;
     final TopAndRightMenu top;
     final HorizontalLayout main;
-    final  Table interviews;
+    final static Table interviews = new Table("Entrevistas");;
 
     private DBController controller;
 
@@ -39,7 +39,6 @@ public class MainView {
         controller = DBController.getInstance();
         this.top = new TopAndRightMenu();
         this.main = new HorizontalLayout();
-        this.interviews = new Table("Entrevistas");
 
         this.interviews.addContainerProperty("Entrevistado", Entrevistado.class, null);
         this.interviews.addContainerProperty("Entrevistador", Entrevistador.class, null);

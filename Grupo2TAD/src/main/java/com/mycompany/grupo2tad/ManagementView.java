@@ -6,8 +6,10 @@
 package com.mycompany.grupo2tad;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -53,7 +55,7 @@ public class ManagementView {
     final Button removeIntervied;
 
     //Datos de el formulario de la entrevista
-    final TextField apto;
+    final ComboBox apto;
     final Button updateInterview;
     final Button removeInterview;
 
@@ -94,7 +96,9 @@ public class ManagementView {
         removeIntervied = new Button("Borrar");
 
         //Crear objectos del segundo formulario
-        apto = new TextField("Apto (SI/NO)");
+        apto = new ComboBox("Apto");
+        apto.addItem("Apto");
+        apto.addItem("No apto");
         updateInterview = new Button("Modificar");
         removeInterview = new Button("Borrar");
 
@@ -232,7 +236,7 @@ public class ManagementView {
             }, entrevista.getId());
 
         }
-       // tableInterviews.setVisibleColumns("Entrevistador", "Entrevistado", "Lugar", "Fecha", "Apto");
+        // tableInterviews.setVisibleColumns("Entrevistador", "Entrevistado", "Lugar", "Fecha", "Apto");
 
     }
 
@@ -264,7 +268,7 @@ public class ManagementView {
                 entrevistado.getId()
             }, entrevistado.getId());
         }
-       // tableIntervieweds.setVisibleColumns("Nombre", "DNI");
+        // tableIntervieweds.setVisibleColumns("Nombre", "DNI");
     }
 
     private void setButtonEvents() {
@@ -273,34 +277,64 @@ public class ManagementView {
             String name = nameEntrevistador.getValue();
             String dni = DNIEntrevistador.getValue();
             String departamento = Departamento.getValue();
-   
-            controller.updateEntrevistador(id, dni, name, departamento);
-           this.generateTableInterviewers();
+
+            if (!name.isEmpty() && !dni.isEmpty() && !departamento.isEmpty()) {
+                controller.updateEntrevistador(id, dni, name, departamento);
+                this.generateTableInterviewers();
+                this.nameEntrevistador.setValue("");
+                this.DNIEntrevistador.setValue("");
+                this.Departamento.setValue("");
+                Notification.show("Entrevistador modificado",
+                        Notification.Type.HUMANIZED_MESSAGE);
+            }
 
         });
         updateInterview.addClickListener(e -> {
-            String apto = this.apto.getValue();
-            controller.updateEntrevistaApto(id, apto);
-           this.generateTableInterviews();
+            String apto = (String) this.apto.getValue();
+            if (!apto.isEmpty()) {
+                controller.updateEntrevistaApto(id, apto);
+                this.generateTableInterviews();
+                this.apto.select("");
+                Notification.show("Entrevista modificada",
+                        Notification.Type.HUMANIZED_MESSAGE);
+            }
         });
         updateIntervied.addClickListener(e -> {
             String name = this.name.getValue();
             String dni = this.DNI.getValue();
-            controller.updateEntrevistado(id, dni, name);
-            this.generateTableIntervieweds();
+            if (!name.isEmpty() && !dni.isEmpty()) {
+                controller.updateEntrevistado(id, dni, name);
+                this.generateTableIntervieweds();
+                this.name.setValue("");
+                this.DNI.setValue("");
+                Notification.show("Entrevistado modifiado",
+                        Notification.Type.HUMANIZED_MESSAGE);
+            }
         });
 
         removeInteviewer.addClickListener(e -> {
             controller.deleteEntrevistador(id);
-           this.generateTableInterviewers();
+            this.generateTableInterviewers();
+            this.nameEntrevistador.setValue("");
+            this.DNIEntrevistador.setValue("");
+            this.Departamento.setValue("");
+            Notification.show("Entrevistador borrado",
+                    Notification.Type.HUMANIZED_MESSAGE);
         });
         removeInterview.addClickListener(e -> {
             controller.deleteEntrevista(id);
-          this.generateTableInterviews();
+            this.generateTableInterviews();
+            this.apto.select("");
+            Notification.show("Entrevista borrada",
+                    Notification.Type.HUMANIZED_MESSAGE);
         });
         removeIntervied.addClickListener(e -> {
             controller.deleteEntrevistado(id);
-           this.generateTableIntervieweds();
+            this.generateTableIntervieweds();
+            this.name.setValue("");
+            this.DNI.setValue("");
+            Notification.show("Entrevistado borrado",
+                    Notification.Type.HUMANIZED_MESSAGE);
         });
 
     }
