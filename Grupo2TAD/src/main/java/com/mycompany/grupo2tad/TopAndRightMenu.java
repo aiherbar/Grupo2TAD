@@ -5,6 +5,7 @@
  */
 package com.mycompany.grupo2tad;
 
+import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
@@ -12,8 +13,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import java.util.Calendar;
-import java.util.Date;
+import com.vaadin.ui.themes.ValoTheme;
 import java.util.List;
 import proyecto_tad.entity.Entrevista;
 import proyecto_tad.entity.Entrevistado;
@@ -58,7 +58,20 @@ public class TopAndRightMenu {
         createInterView = new Button("Crear entrevistas");
         createInterviwer = new Button("Crear entrevistador");
         createIntervied = new Button("Crear entrevistado");
+        
+        this.createInterView.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        this.createInterviwer.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        this.createIntervied.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        //Añadir estilos
+        createInterView.addStyleName("component-margin");
+        createInterviwer.addStyleName("component-margin");
+        createIntervied.addStyleName("component-margin");
+        
         leftBar = new VerticalLayout();
+        leftBar.setHeight("700px");
+        this.leftBar.addStyleName("component-padding");
+        this.leftBar.addStyleName("left-border");
+        leftBar.setWidth("400px");
         formEntrevistados = new FormLayout();
         formEntrevistadores = new FormLayout();
         formEntrevista = new FormLayout();

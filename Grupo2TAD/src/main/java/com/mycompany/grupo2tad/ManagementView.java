@@ -5,6 +5,8 @@
  */
 package com.mycompany.grupo2tad;
 
+import com.vaadin.addon.charts.themes.ValoDarkTheme;
+import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
@@ -13,6 +15,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 import java.util.Date;
 import proyecto_tad.entity.Entrevista;
 import proyecto_tad.entity.Entrevistado;
@@ -65,11 +68,15 @@ public class ManagementView {
     public ManagementView() {
         controller = DBController.getInstance();
         this.main = new HorizontalLayout();
+        this.main.setSizeFull();
+        this.main.addStyleName("component-padding");
         //Setear tablas
         this.tableInterviews = new Table();
         this.tableInterviewers = new Table();
         this.tableIntervieweds = new Table();
-
+        this.tableInterviews.setWidth("1000px");
+        this.tableInterviewers.setWidth("1000px");
+        this.tableIntervieweds.setWidth("1000px");
         this.setTables();
 
         //Setear botones
@@ -77,9 +84,21 @@ public class ManagementView {
         this.showInterviewers = new Button("Mostrar entrevistadores");
         this.showInterviews = new Button("Mostrar entrevistas");
 
+        //Añadir estilos a los botones
+        this.showIntervieweds.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        this.showInterviewers.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        this.showInterviews.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        this.showIntervieweds.addStyleName("component-margin");
+        this.showInterviewers.addStyleName("component-margin");
+        this.showInterviews.addStyleName("component-margin");
+
         this.setUpperButtons();
 
         rightBar = new VerticalLayout();
+        rightBar.setHeight("700px");
+        rightBar.setWidth("200px");
+        this.rightBar.addStyleName("left-border");
+        this.rightBar.addStyleName("component-padding");
         formEntrevistados = new FormLayout();
         formEntrevistadores = new FormLayout();
         formEntrevista = new FormLayout();
@@ -90,18 +109,21 @@ public class ManagementView {
         nameEntrevistador = new TextField("Nombre");
         DNIEntrevistador = new TextField("DNI");
         Departamento = new TextField("Departamento");
+
         updateInteviewer = new Button("Modificar");
         updateIntervied = new Button("Modificar");
+
         removeInteviewer = new Button("Borrar");
         removeIntervied = new Button("Borrar");
-
-        //Crear objectos del segundo formulario
+        removeInteviewer.addStyleName(ValoTheme.BUTTON_DANGER);
+        removeIntervied.addStyleName(ValoTheme.BUTTON_DANGER);
+        //Crear objetos del segundo formulario
         apto = new ComboBox("Apto");
         apto.addItem("Apto");
         apto.addItem("No apto");
         updateInterview = new Button("Modificar");
         removeInterview = new Button("Borrar");
-
+        removeInterview.addStyleName(ValoTheme.BUTTON_DANGER);
         this.setButtonEvents();
 
         //Crear formularios
@@ -313,13 +335,18 @@ public class ManagementView {
         });
 
         removeInteviewer.addClickListener(e -> {
-            controller.deleteEntrevistador(id);
-            this.generateTableInterviewers();
-            this.nameEntrevistador.setValue("");
-            this.DNIEntrevistador.setValue("");
-            this.Departamento.setValue("");
-            Notification.show("Entrevistador borrado",
-                    Notification.Type.HUMANIZED_MESSAGE);
+            if (controller.getEntrevistasEntrevistador(id) <= 0) {
+                controller.deleteEntrevistador(id);
+                this.generateTableInterviewers();
+                this.nameEntrevistador.setValue("");
+                this.DNIEntrevistador.setValue("");
+                this.Departamento.setValue("");
+                Notification.show("Entrevistador borrado",
+                        Notification.Type.HUMANIZED_MESSAGE);
+            } else {
+                Notification.show("Entrevistador en entrevista, debe borrar la entrevista antes",
+                        Notification.Type.ERROR_MESSAGE);
+            }
         });
         removeInterview.addClickListener(e -> {
             controller.deleteEntrevista(id);
@@ -329,12 +356,17 @@ public class ManagementView {
                     Notification.Type.HUMANIZED_MESSAGE);
         });
         removeIntervied.addClickListener(e -> {
-            controller.deleteEntrevistado(id);
-            this.generateTableIntervieweds();
-            this.name.setValue("");
-            this.DNI.setValue("");
-            Notification.show("Entrevistado borrado",
-                    Notification.Type.HUMANIZED_MESSAGE);
+            if (controller.getEntrevistasEntrevistado(id) <= 0) {
+                controller.deleteEntrevistado(id);
+                this.generateTableIntervieweds();
+                this.name.setValue("");
+                this.DNI.setValue("");
+                Notification.show("Entrevistado borrado",
+                        Notification.Type.HUMANIZED_MESSAGE);
+            } else {
+                Notification.show("Entrevistado en entrevista, debe borrar la entrevista antes",
+                        Notification.Type.ERROR_MESSAGE);
+            }
         });
 
     }

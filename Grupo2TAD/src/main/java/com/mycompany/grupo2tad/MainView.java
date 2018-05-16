@@ -31,7 +31,8 @@ public class MainView {
     final Calendar cal;
     final TopAndRightMenu top;
     final HorizontalLayout main;
-    final static Table interviews = new Table("Entrevistas");;
+    final static Table interviews = new Table();
+    
 
     private DBController controller;
 
@@ -39,7 +40,8 @@ public class MainView {
         controller = DBController.getInstance();
         this.top = new TopAndRightMenu();
         this.main = new HorizontalLayout();
-
+        this.main.setSizeFull();
+        this.main.addStyleName("component-padding");
         this.interviews.addContainerProperty("Entrevistado", Entrevistado.class, null);
         this.interviews.addContainerProperty("Entrevistador", Entrevistador.class, null);
         this.interviews.addContainerProperty("Lugar", String.class, null);
@@ -51,13 +53,15 @@ public class MainView {
 
         this.interviews.setDragMode(Table.TableDragMode.ROW);
         this.interviews.setPageLength(this.interviews.size());
+        this.interviews.setWidth("1000px");
+        this.interviews.setHeight("140px");
 
         this.cal = new Calendar();
         entrevistas = controller.getEntrevistasConFecha();
         for (Entrevista entrevista : entrevistas) {
             BasicEvent newEvent = new BasicEvent();
             String s = String.format("%04d", entrevista.getId());
-            newEvent.setCaption("Entrevista con " + controller.getEntrevistado(entrevista.getIdEntrevistado())+" ("+ String.format("%04d", entrevista.getId()) +")");
+            newEvent.setCaption("Con " + controller.getEntrevistado(entrevista.getIdEntrevistado()) + " (" + String.format("%04d", entrevista.getId()) + ")");
             newEvent.setDescription("Entrevistador: " + controller.getEntrevistador(entrevista.getIdEntrevistador()) + " "
                     + "Lugar: " + entrevista.getLugar());
             newEvent.setStart(entrevista.getFecha());
@@ -87,13 +91,15 @@ public class MainView {
             public void componentEvent(Component.Event event) {
                 CalendarComponentEvents.MoveEvent calevent = (CalendarComponentEvents.MoveEvent) event;
                 if (calevent.getNewStart() != null) {
-                    int id = Integer.parseInt(calevent.getCalendarEvent().getCaption().substring(calevent.getCalendarEvent().getCaption().length()-5, calevent.getCalendarEvent().getCaption().length()-1));
-                    
+                    int id = Integer.parseInt(calevent.getCalendarEvent().getCaption().substring(calevent.getCalendarEvent().getCaption().length() - 5, calevent.getCalendarEvent().getCaption().length() - 1));
+
                     controller.updateEntrevistaFecha(id, calevent.getNewStart());
                 }
             }
         });
 
+        cal.setWidth("1000px");
+        
         main.addComponents(new VerticalLayout(this.top.getTopBar(), this.cal, this.interviews), this.top.getRightBar());
     }
 
@@ -109,8 +115,8 @@ public class MainView {
         Date endTime = timeCalendar.getTime();
 
         Item draggedItem = transferable.getSourceComponent().getItem(transferable.getItemId());
-        
-        String eventType = "Entrevista con " + draggedItem.getItemProperty("Entrevistado").getValue().toString()+" ("+ String.format("%04d", transferable.getItemId()) +")";
+
+        String eventType = "Con " + draggedItem.getItemProperty("Entrevistado").getValue().toString() + " (" + String.format("%04d", transferable.getItemId()) + ")";
 
         String eventDescription = "Entrevistador: " + (String) draggedItem.getItemProperty("Entrevistador").getValue().toString() + " "
                 + "Lugar: " + (String) draggedItem.getItemProperty("Lugar").getValue();
@@ -122,13 +128,12 @@ public class MainView {
         newEvent.setDescription(eventDescription);
         newEvent.setStart(dropTime);
         newEvent.setEnd(endTime);
-        
-        controller.updateEntrevistaFecha((int)transferable.getItemId(), dropTime);
 
-        Entrevista e = controller.getEntrevista((int)transferable.getItemId());
+        controller.updateEntrevistaFecha((int) transferable.getItemId(), dropTime);
+
+        Entrevista e = controller.getEntrevista((int) transferable.getItemId());
         BasicEventProvider ep = (BasicEventProvider) details.getTargetCalendar().getEventProvider();
         ep.addEvent(newEvent);
     }
-    
 
 }

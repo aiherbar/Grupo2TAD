@@ -242,4 +242,12 @@ public class DBController {
         hibernateSession.refresh(entrevistado);
         return entrevistado;
     }
+    
+        public long getEntrevistasEntrevistador(int id){
+        return (long) hibernateSession.createQuery("select count(*) from Entrevista where id_entrevistador="+id).uniqueResult();    
+    }
+        public long getEntrevistasEntrevistado(int id){
+        return (long) hibernateSession.createQuery("select count(*) from Entrevista where id_entrevistado="+id).uniqueResult();    
+    }
+    
 }

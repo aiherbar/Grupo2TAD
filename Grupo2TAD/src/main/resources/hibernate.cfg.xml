@@ -45,7 +45,7 @@ Contributor(s):
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/proyecto_tad?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
-     <property name="current_session_context_class">thread</property>
+    <property name="current_session_context_class">thread</property>
     <mapping resource="proyecto_tad/entity/Entrevistado.hbm.xml"/>
     <mapping resource="proyecto_tad/entity/Entrevista.hbm.xml"/>
     <mapping resource="proyecto_tad/entity/Entrevistador.hbm.xml"/>

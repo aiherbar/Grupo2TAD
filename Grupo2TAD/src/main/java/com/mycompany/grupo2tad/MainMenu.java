@@ -13,8 +13,6 @@ import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
-import java.util.List;
-import proyecto_tad.entity.Entrevista;
 
 /**
  *
@@ -34,18 +32,19 @@ public class MainMenu {
         controller = DBController.getInstance();
         mainView = new MainView();
         menu = new CssLayout();
-        menu.addStyleName("background-menu");
         mainLayout = new HorizontalLayout();
         mainLayout.addComponent(mainView.getView());
 
         menu.addStyleName(ValoTheme.MENU_PART_LARGE_ICONS);
         Label l = new Label("Interviews Dashboard");
         l.setStyleName(ValoTheme.LABEL_H3);
+        l.addStyleName("text-menu");
         menu.addComponent(l);
 
         Button main = new Button("Principal");
         main.setIcon(FontAwesome.CALENDAR_O);
         main.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+        main.addStyleName("text-menu");
         main.addClickListener(e -> {
             mainLayout.removeAllComponents();
             mainView = new MainView();
@@ -58,6 +57,7 @@ public class MainMenu {
         draggable.setDragStartMode(DragAndDropWrapper.DragStartMode.WRAPPER);
         charts.setIcon(FontAwesome.BAR_CHART_O);
         charts.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+        charts.addStyleName("text-menu");
         charts.addClickListener(e -> {
             mainLayout.removeAllComponents();
             chartView = new ChartsView();
@@ -68,6 +68,7 @@ public class MainMenu {
         Button management = new Button("Gestión");
         management.setIcon(FontAwesome.TABLE);
         management.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+        management.addStyleName("text-menu");
         management.addClickListener(e -> {
             mainLayout.removeAllComponents();
             managementView = new ManagementView();
@@ -79,6 +80,7 @@ public class MainMenu {
         Button logOut = new Button("Log Out");
         logOut.setIcon(FontAwesome.ARROW_LEFT);
         logOut.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+        logOut.addStyleName("text-menu");
         logOut.addClickListener(e -> {
             controller.closeInstance();
             session.invalidate();

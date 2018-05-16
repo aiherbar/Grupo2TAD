@@ -15,6 +15,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -32,22 +33,28 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("mytheme")
 public class MyUI extends UI {
 
-
     final MainMenu menu = new MainMenu();
-    final HorizontalLayout main = new HorizontalLayout(); 
+    final HorizontalLayout main = new HorizontalLayout();
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        //VerticalLayout vertical = new VerticalLayout(menu.getMenu());
-        main.addComponents(menu.getMenu(),menu.getCurrent());
+        VerticalLayout vertical = new VerticalLayout(menu.getMenu());
+        vertical.setHeight("700px");
+        vertical.addStyleName("background-menu");
+        vertical.addStyleName("component-padding");
         
+        main.addComponents(vertical, menu.getCurrent());
+
         WrappedSession session = getSession().getSession();
-     
+
         CssLayout loginLayout = new CssLayout();
         FormLayout form = new FormLayout();
-
+        //form.setWidth(100, Unit.PIXELS);
+        form.addStyleName("login-style");
+        
         final Label tituloLogin = new Label("<h2>Login</h2>", ContentMode.HTML);
         final TextField usuario = new TextField("Usuario");
-        final TextField password = new TextField("Contraseña");
+        final PasswordField password = new PasswordField("Contraseña");
 
         Button login = new Button("Acceder");
         login.addClickListener(e -> {
@@ -59,17 +66,20 @@ public class MyUI extends UI {
 
         menu.setSession(session);
         form.addComponents(tituloLogin, usuario, password, login);
+        loginLayout.addStyleName("background-login");
+        loginLayout.setSizeFull();
         loginLayout.addComponent(form);
         setContent(loginLayout);
-        
+
         addDetachListener((e) -> {
             DBController.getInstance().closeInstance();
         });
+        
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {
     }
-    
+
 }
