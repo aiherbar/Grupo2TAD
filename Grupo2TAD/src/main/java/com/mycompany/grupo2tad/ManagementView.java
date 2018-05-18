@@ -17,6 +17,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import java.util.Date;
+import java.util.Locale;
 import proyecto_tad.entity.Entrevista;
 import proyecto_tad.entity.Entrevistado;
 import proyecto_tad.entity.Entrevistador;
@@ -77,6 +78,9 @@ public class ManagementView {
         this.tableInterviews.setWidth("1000px");
         this.tableInterviewers.setWidth("1000px");
         this.tableIntervieweds.setWidth("1000px");
+         this.tableInterviews.setPageLength(0);
+        this.tableInterviewers.setPageLength(0);
+        this.tableIntervieweds.setPageLength(0);
         this.setTables();
 
         //Setear botones
@@ -290,6 +294,7 @@ public class ManagementView {
                 entrevistado.getId()
             }, entrevistado.getId());
         }
+       
         // tableIntervieweds.setVisibleColumns("Nombre", "DNI");
     }
 

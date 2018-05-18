@@ -142,6 +142,8 @@ public class TopAndRightMenu {
                 DNIEntrevistador.setValue("");
                 nameEntrevistador.setValue("");
                 Departamento.setValue("");
+                entrevistadores.removeAllItems();
+                entrevistadores.addItems(controller.getEntrevistadores());
                 Notification.show("Entrevistador creado con exito",
                         Notification.Type.HUMANIZED_MESSAGE);
             }
@@ -153,6 +155,8 @@ public class TopAndRightMenu {
                 controller.setEntrevistado(DNI.getValue(), name.getValue());
                 DNI.setValue("");
                 name.setValue("");
+                entrevistados.removeAllItems();
+                entrevistados.addItems(controller.getEntrevistados());
                 Notification.show("Entrevistado creado con exito",
                         Notification.Type.HUMANIZED_MESSAGE);
             }
